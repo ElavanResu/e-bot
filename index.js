@@ -20,9 +20,34 @@ client.once('ready', () => {
 	console.log('Ready!');
 });
 
-client.on('message', message => {
+client.on('shardError', error => {
+	console.error('A websocket connection encountered an error:', error);
+});
+
+process.on('unhandledRejection', error => {
+	console.error('Unhandled promise rejection:', error);
+});
+
+client.on('message', async message => {
+
+	const userElavan = message.mentions.users.get('234249678328299520');
+	const matchedWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
+	if ((userElavan !== undefined || matchedWords !== null) && message.author.id !== '712367845572345977') {
+		try {
+			await message.react('🇪');
+			await message.react('🇱');
+			await message.react('🅰️');
+			await message.react('🇻');
+			await message.react('🇦');
+			await message.react('🇳');
+		} catch (error) {
+			console.error('One of the emojis failed to react');
+		}
+	}
+
+
+
 	if (showNotification && message.mentions.users.size && message.author.id !== '234249678328299520' && message.author.id !== '712367845572345977') {
-		const userElavan = message.mentions.users.get('234249678328299520');
 		if (userElavan !== undefined) {
 			if (userElavan.presence.status === 'offline') {
 				message.reply('pardon my intrusion. My master, ElavanResu, is not available at the moment. He\'ll get back to you as soon as possibe.');
