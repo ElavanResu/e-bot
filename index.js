@@ -1,7 +1,7 @@
 // adding packages
 const Discord = require('discord.js');
 const fs = require('fs');
-const { prefix, token } = require('./config.json');
+const { prefix, token, showNotification } = require('./config.json');
 // Creating client instance
 const client = new Discord.Client();
 
@@ -21,16 +21,16 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-	if (message.mentions.users.size && message.author.id !== '234249678328299520' && message.author.id !== '712367845572345977') {
+	if (showNotification && message.mentions.users.size && message.author.id !== '234249678328299520' && message.author.id !== '712367845572345977') {
 		const userElavan = message.mentions.users.get('234249678328299520');
 		if (userElavan !== undefined) {
 			if (userElavan.presence.status === 'offline') {
-				message.reply('my master, ElavanResu, is not available at the moment. He\'ll get back to you as soon as possibe.');
+				message.reply('pardon my intrusion. My master, ElavanResu, is not available at the moment. He\'ll get back to you as soon as possibe.');
 			}
 		}
 	}
 	console.log(message.content);
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	console.log('args: ', args);
