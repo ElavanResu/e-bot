@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, showNotification } = require('./config.json');
-// const { config } = require('dotenv');
+const { config } = require('dotenv');
 // Creating client instance
 const client = new Discord.Client();
 
@@ -39,8 +39,12 @@ process.on('unhandledRejection', error => {
 client.on('message', async message => {
 
 	const userElavan = message.mentions.users.get('234249678328299520');
-	const matchedWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
-	if ((userElavan !== undefined || matchedWords !== null) && message.author.id !== '712367845572345977') {
+	const userJaegar = message.mentions.users.get('427000717681885185');
+	const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
+	const matchedJaegarWords = message.content.toLowerCase().match(/jaegar|gulkand|gulkandkush|jae/g);
+	const elavanConfirm = (userElavan !== undefined || matchedElavanWords !== null) && message.author.id !== '712367845572345977';
+	const jaegarConfirm = (userJaegar !== undefined || matchedJaegarWords !== null);
+	if (elavanConfirm) {
 		try {
 			await message.react('🇪');
 			await message.react('🇱');
@@ -50,6 +54,33 @@ client.on('message', async message => {
 			await message.react('🇳');
 		} catch (error) {
 			console.error('One of the emojis failed to react');
+		}
+	}
+
+	// Pushkie reaction
+	if (!elavanConfirm && message.author.id === '686973497250938929') {
+		try {
+			await message.react('💰');
+		} catch (error) {
+			console.error('One of the emojis failed to react');
+		}
+	}
+
+	// Ponder reaction
+	if (!elavanConfirm && message.author.id === '213519729296539648') {
+		try {
+			await message.react('🍔');
+		} catch (error) {
+			console.error('One of the emojis failed to react');
+		}
+	}
+
+	// Jaegar reaction
+	if (!elavanConfirm && (jaegarConfirm || message.author.id === '427000717681885185')) {
+		try {
+			await await message.react('🏳️‍🌈');
+		} catch (error) {
+			console.error('One of the meojis failed to react');
 		}
 	}
 
@@ -121,7 +152,7 @@ client.on('message', async message => {
 });
 
 // log in to discord to make the bot online
-// config({
-// 	path: __dirname + '/.env'
-// });
-client.login(process.env.token);
+config({
+	path: __dirname + '/.env'
+});
+client.login(process.env.TOKEN);
