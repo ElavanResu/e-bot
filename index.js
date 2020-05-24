@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, showNotification } = require('./config.json');
-const { config } = require('dotenv');
+// const { config } = require('dotenv');
 // Creating client instance
 const client = new Discord.Client();
 
@@ -152,7 +152,7 @@ client.on('message', async message => {
 });
 
 // log in to discord to make the bot online
-config({
-	path: __dirname + '/.env'
-});
-client.login(process.env.TOKEN);
+// config({
+// 	path: __dirname + '/.env'
+// });
+client.login(process.env.token);
