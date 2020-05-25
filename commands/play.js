@@ -30,6 +30,9 @@ module.exports = {
 				const dispatcher = connection.play(stream);
 
 				dispatcher.on('end', () => voiceChannel.leave());
-			});
+      })
+      .catch(error => {
+        message.channel.send(`Error in streaming music: ${error}`);
+      });
 	},
 };
