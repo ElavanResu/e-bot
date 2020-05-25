@@ -14,7 +14,7 @@
 const userTable = {
 	elavan: {
 		id: '234249678328299520',
-		reactions: ['🇪', '🇱', '🅰️', '🇻', '🇦', '🇳'],
+		reactions: ['✋', '👁️', '🤚'],
 		// reactions: ['🅰️'],
 		checkWords: /elavan|elavanresu|resu|navale|shubham/g,
 		evadeBot: true,
@@ -58,6 +58,30 @@ const userTable = {
 		showOnMention: false,
 		everytime: true,
 	},
+	clover: {
+		id: '545307696988160011',
+		reactions: ['🐝'],
+		evadeBot: false,
+		bellowElavan: false,
+		showOnMention: true,
+		everytime: false,
+	},
+	// dhruv: {
+	// 	id: '460488764511223848',
+	// 	reactions: ['🍄'],
+	// 	evadeBot: false,
+	// 	bellowElavan: true,
+	// 	showOnMention: true,
+	// 	everytime: true,
+	// },
+	nathan: {
+		id: '232793743374155777',
+		reactions: ['🇫', '🇦', '🇬'],
+		evadeBot: false,
+		bellowElavan: true,
+		showOnMention: true,
+		everytime: true,
+	}
 };
 
 const initiateReactionAlgo = async (message) => {

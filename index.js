@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, showNotification } = require('./config.json');
-const { config } = require('dotenv');
+// const { config } = require('dotenv');
 const { initiateReactionAlgo } = require('./features/reactions');
 // Creating client instance
 const client = new Discord.Client();
@@ -14,54 +14,6 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
-}
-
-function hook(channel, title, message, color, avatarUrl) {
-	console.log('hook inside')
-	if (!channel) return console.log('channel not specified');
-	if (!title) return console.log('Title not specified');
-	if (!message) return console.log('Message not specified');
-	if (!color) return color = 'd9a744';
-	if (!avatarUrl) return avatarUrl = 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png';
-
-	color = color.replace(/\s/g, '');
-	avatarUrl = avatarUrl.replace(/\s/g, '');
-
-	channel.fetchWebhooks()
-		.then(webhook => {
-			let foundHook = webhook.find('Hoop Hook', 'Webhook');
-
-			if (!foundHook) {
-				channel.createWebhook('Webhook', 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png')
-					.then(newWebhook => {
-						newWebhook.send('', {
-							'username': 'Arjun',
-							'avatarUrl': 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png',
-							'embeds': [{
-								'color': parseInt(`0x${color}`),
-								'description': message,
-							}]
-						})
-					})
-					.catch (error => {
-						console.log('error: ', error);
-						return channel.send('Error, check console');
-					})
-			} else {
-				foundHook.send('', {
-					'username': 'Arjun',
-					'avatarUrl': 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png',
-					'embeds': [{
-						'color': parseInt(`0x${color}`),
-						'description': message,
-					}]
-				})
-				.catch(error => {
-					console.log('error: ', error)
-					return channel.send('error, check console');
-				})
-			}
-		})
 }
 
 const cooldowns = new Discord.Collection();
@@ -157,12 +109,6 @@ client.on('message', async message => {
 		return;
 	}
 
-	if (commandName === 'hook') {
-		message.delete();
-		hook(message.channel, args[0], args[1]);
-		return;
-	}
-
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
@@ -214,7 +160,7 @@ client.on('message', async message => {
 });
 
 // log in to discord to make the bot online
-config({
-	path: __dirname + '/.env'
-});
-client.login(process.env.TOKEN);
+// config({
+// 	path: __dirname + '/.env'
+// });
+client.login(process.env.token);
