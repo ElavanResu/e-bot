@@ -2,7 +2,8 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, showNotification } = require('./config.json');
-// const { config } = require('dotenv');
+const { config } = require('dotenv');
+const { initiateReactionAlgo } = require('./features/reactions');
 // Creating client instance
 const client = new Discord.Client();
 
@@ -13,6 +14,54 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
+}
+
+function hook(channel, title, message, color, avatarUrl) {
+	console.log('hook inside')
+	if (!channel) return console.log('channel not specified');
+	if (!title) return console.log('Title not specified');
+	if (!message) return console.log('Message not specified');
+	if (!color) return color = 'd9a744';
+	if (!avatarUrl) return avatarUrl = 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png';
+
+	color = color.replace(/\s/g, '');
+	avatarUrl = avatarUrl.replace(/\s/g, '');
+
+	channel.fetchWebhooks()
+		.then(webhook => {
+			let foundHook = webhook.find('Hoop Hook', 'Webhook');
+
+			if (!foundHook) {
+				channel.createWebhook('Webhook', 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png')
+					.then(newWebhook => {
+						newWebhook.send('', {
+							'username': 'Arjun',
+							'avatarUrl': 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png',
+							'embeds': [{
+								'color': parseInt(`0x${color}`),
+								'description': message,
+							}]
+						})
+					})
+					.catch (error => {
+						console.log('error: ', error);
+						return channel.send('Error, check console');
+					})
+			} else {
+				foundHook.send('', {
+					'username': 'Arjun',
+					'avatarUrl': 'https://cdn.discordapp.com/avatars/234249678328299520/807ef134c0caa685ecc11cff2fa677e2.png',
+					'embeds': [{
+						'color': parseInt(`0x${color}`),
+						'description': message,
+					}]
+				})
+				.catch(error => {
+					console.log('error: ', error)
+					return channel.send('error, check console');
+				})
+			}
+		})
 }
 
 const cooldowns = new Discord.Collection();
@@ -37,54 +86,56 @@ process.on('unhandledRejection', error => {
 });
 
 client.on('message', async message => {
-
 	const userElavan = message.mentions.users.get('234249678328299520');
-	const userJaegar = message.mentions.users.get('427000717681885185');
-	const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
-	const matchedJaegarWords = message.content.toLowerCase().match(/jaegar|gulkand|gulkandkush|jae/g);
-	const elavanConfirm = (userElavan !== undefined || matchedElavanWords !== null) && message.author.id !== '712367845572345977';
-	const jaegarConfirm = (userJaegar !== undefined || matchedJaegarWords !== null);
-	if (elavanConfirm) {
-		try {
-			await message.react('🇪');
-			await message.react('🇱');
-			await message.react('🅰️');
-			await message.react('🇻');
-			await message.react('🇦');
-			await message.react('🇳');
-		} catch (error) {
-			console.error('One of the emojis failed to react');
-		}
+	try {
+		await initiateReactionAlgo(message);
+	} catch (error) {
+		console.log('Error in initiateReactionAlgo at index.js: ', error);
 	}
+	// const userJaegar = message.mentions.users.get('427000717681885185');
+	// const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
+	// const matchedJaegarWords = message.content.toLowerCase().match(/jaegar|gulkand|gulkandkush|jae/g);
+	// const elavanConfirm = (userElavan !== undefined || matchedElavanWords !== null) && message.author.id !== '712367845572345977';
+	// const jaegarConfirm = (userJaegar !== undefined || matchedJaegarWords !== null);
+	// if (elavanConfirm) {
+	// 	try {
+	// 		await message.react('🇪');
+	// 		await message.react('🇱');
+	// 		await message.react('🅰️');
+	// 		await message.react('🇻');
+	// 		await message.react('🇦');
+	// 		await message.react('🇳');
+	// 	} catch (error) {
+	// 		console.error('One of the emojis failed to react');
+	// 	}
+	// }
 
-	// Pushkie reaction
-	if (!elavanConfirm && message.author.id === '686973497250938929') {
-		try {
-			await message.react('💰');
-		} catch (error) {
-			console.error('One of the emojis failed to react');
-		}
-	}
+	// // Pushkie reaction
+	// if (!elavanConfirm && message.author.id === '686973497250938929') {
+	// 	try {
+	// 		await message.react('💰');
+	// 	} catch (error) {
+	// 		console.error('One of the emojis failed to react');
+	// 	}
+	// }
 
-	// Ponder reaction
-	if (!elavanConfirm && message.author.id === '213519729296539648') {
-		try {
-			await message.react('🍔');
-		} catch (error) {
-			console.error('One of the emojis failed to react');
-		}
-	}
+	// // Ponder reaction
+	// if (!elavanConfirm && message.author.id === '213519729296539648') {
+	// 	try {
+	// 		await message.react('🍔');
+	// 	} catch (error) {
+	// 		console.error('One of the emojis failed to react');
+	// 	}
+	// }
 
-	// Jaegar reaction
-	if (!elavanConfirm && (jaegarConfirm || message.author.id === '427000717681885185')) {
-		try {
-			await await message.react('🏳️‍🌈');
-		} catch (error) {
-			console.error('One of the meojis failed to react');
-		}
-	}
-
-
+	// // Jaegar reaction
+	// if (!elavanConfirm && (jaegarConfirm || message.author.id === '427000717681885185')) {
+	// 	try {
+	// 		await await message.react('🏳️‍🌈');
+	// 	} catch (error) {
+	// 		console.error('One of the meojis failed to react');
+	// 	}
+	// }
 
 	if (showNotification && message.mentions.users.size && message.author.id !== '234249678328299520' && message.author.id !== '712367845572345977') {
 		if (userElavan !== undefined) {
@@ -99,7 +150,18 @@ client.on('message', async message => {
 	const args = message.content.slice(prefix.length).split(/ +/);
 	console.log('args: ', args);
 	const commandName = args.shift().toLowerCase();
-	console.log('command: ', commandName);
+	console.log('command1: ', commandName);
+	if (commandName === 'leaveconfirm' && message.author.id === '234249678328299520') {
+		message.channel.send('Good bye.');
+		await message.guild.leave();
+		return;
+	}
+
+	if (commandName === 'hook') {
+		message.delete();
+		hook(message.channel, args[0], args[1]);
+		return;
+	}
 
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
@@ -152,7 +214,7 @@ client.on('message', async message => {
 });
 
 // log in to discord to make the bot online
-// config({
-// 	path: __dirname + '/.env'
-// });
-client.login(process.env.token);
+config({
+	path: __dirname + '/.env'
+});
+client.login(process.env.TOKEN);
