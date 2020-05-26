@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon May 25 2020
+ * Last Modified: Tue May 26 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -49,15 +49,15 @@ const userTable = {
 		showOnMention: false,
 		everytime: true,
 	},
-	pounder: {
-		id: '213519729296539648',
-		reactions: ['🍔'],
-		// checkWords: /being|ancient/g,
-		evadeBot: false,
-		bellowElavan: true,
-		showOnMention: false,
-		everytime: true,
-	},
+	// pounder: {
+	// 	id: '213519729296539648',
+	// 	reactions: ['🍔'],
+	// 	// checkWords: /being|ancient/g,
+	// 	evadeBot: false,
+	// 	bellowElavan: true,
+	// 	showOnMention: false,
+	// 	everytime: true,
+	// },
 	clover: {
 		id: '545307696988160011',
 		reactions: ['🐝'],
