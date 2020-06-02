@@ -89,7 +89,7 @@ const userTable = {
 		evadeBot: false,
 		bellowElavan: true,
 		showOnMention: true,
-		everytime: false,
+		everytime: true,
 	},
 };
 
