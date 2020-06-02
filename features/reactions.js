@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue May 26 2020
+ * Last Modified: Tue Jun 02 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -81,7 +81,16 @@ const userTable = {
 		bellowElavan: true,
 		showOnMention: true,
 		everytime: true,
-	}
+	},
+	jerry: {
+		id: '485378865481383987',
+		reactions: ['🎶'],
+		checkWords: /jerry/g,
+		evadeBot: false,
+		bellowElavan: true,
+		showOnMention: true,
+		everytime: false,
+	},
 };
 
 const initiateReactionAlgo = async (message) => {
