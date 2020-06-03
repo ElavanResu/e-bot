@@ -4,7 +4,7 @@
  * Created Date: Monday, May 25th 2020, 6:02:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon May 25 2020
+ * Last Modified: Thu Jun 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -47,10 +47,8 @@ module.exports = {
 				break;
 			}
 		}
-		console.log('aalow: ', allow);
 		if (!allow) {
-			message.delete();
-			return console.log('Not allowed');
+			return message.channel.send('You are not allowed to use slv hook.');
 		}
 		message.delete();
 		if (!message.channel) return console.log('channel not specified');

@@ -21,7 +21,6 @@ module.exports = {
 			message.channel.send({ embed: {
 				color: 0x3EFEFF,
 				title: `${user.username}'s profile pic`,
-				// url: 'https://discord.js.org',
 				image: {
 					url: `${user.displayAvatarURL({ format: 'png', dynamic: true })}`,
 				},

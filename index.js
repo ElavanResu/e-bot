@@ -17,6 +17,38 @@ for (const file of commandFiles) {
 }
 
 const cooldowns = new Discord.Collection();
+
+
+// client.on('messageDelete', async message => {
+// 	console.log('Message: ', JSON.stringify(message));
+
+// 	if (!message.guild) return;
+
+// 	try {
+// 		const fetchedLogs = await message.guild.fetchAuditLogs({
+// 			limit: 1,
+// 			type: 'MESSAGE_DELETE',
+// 		});
+
+// 		const msgToDelete = fetchedLogs.entries.first();
+
+// 		if (!msgToDelete) return console.log(`A message by ${message.author.tag} was deleted, but no relevant audit logs were found`);
+
+// 		console.log('msgToDelete: ', msgToDelete);
+
+// 		const { executor, target } = msgToDelete;
+
+// 		if (target.id === message.author.id) {
+// 			console.log(`A message by ${message.author.tag} was deleted by ${executor.tag}`);
+// 		} else {
+// 			console.log(`A message by ${message.author.tag} was deleted, but we don't know by who`);
+// 		}
+// 	} catch (error) {
+// 		console.error(`Error in fetching audit logs: ${error}`);
+// 	}
+// });
+
+
 // logging
 client.on('ready', () => {
 	client.user.setPresence({
@@ -163,4 +195,4 @@ client.on('message', async message => {
 // config({
 // 	path: __dirname + '/.env'
 // });
-client.login(process.env.token);
+client.login(process.env.TOKEN);
