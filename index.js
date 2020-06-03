@@ -23,7 +23,7 @@ const cooldowns = new Discord.Collection();
 client.on('messageDelete', async message => {
 	message.channel.send(`${typeof process.env.DISABLELOGS}`);
 	// if (!parseInt(process.env.DISABLELOGS)) {
-		logDeletedMessages(message);
+	logDeletedMessages(message);
 	// }
 });
 

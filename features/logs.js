@@ -72,7 +72,7 @@ const logDeletedMessages = async (message) => {
 		// console.log(`A message by ${message.author.tag} was deleted by ${executor.tag}`);
 
 	} catch (error) {
-		console.error(`Error in fetching audit logs: ${error}`);
+		message.channel.send(`Error in fetching audit logs: ${error}`);
 	}
 }
 
