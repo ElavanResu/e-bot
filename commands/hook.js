@@ -4,7 +4,7 @@
  * Created Date: Monday, May 25th 2020, 6:02:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 04 2020
+ * Last Modified: Fri Jun 05 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -39,7 +39,7 @@ module.exports = {
 	description: 'Hooks',
 	args: true,
 	execute(message, args) {
-    console.log('guild: ', message.guild);
+		console.log('guild: ', message.guild);
 		let allow = false;
 		for(let count = 0; count < whiteList.length; count++) {
 			if (message.author.id === whiteList[count].id) {

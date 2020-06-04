@@ -4,7 +4,7 @@
  * Created Date: Thursday, June 4th 2020, 2:05:00 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 04 2020
+ * Last Modified: Fri Jun 05 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -22,7 +22,9 @@ const logDeletedMessages = async (message) => {
 			type: 'MESSAGE_DELETE',
 		});
 
+		console.log('fetched lohs: ', fetchedLogs);
 		const msgToDelete = fetchedLogs.entries.first();
+		console.log('msgToDelete: ', msgToDelete);
 
 		if (!msgToDelete) return console.log(`A message by ${message.author.tag} was deleted, but no relevant audit logs were found`);
 
@@ -63,7 +65,7 @@ const logDeletedMessages = async (message) => {
 					timestamp: new Date(),
 					footer: {
 						text: `Deleter's Id: ${executor.id}`,
-						// icon_url: 'https://i.imgur.com/fKL31aD.jpg',
+						icon_url: 'https://i.imgur.com/fKL31aD.jpg',
 					},
 				},
 			],
@@ -74,8 +76,8 @@ const logDeletedMessages = async (message) => {
 	} catch (error) {
 		message.channel.send(`Error in fetching audit logs: ${error}`);
 	}
-}
+};
 
 module.exports = {
 	logDeletedMessages,
-}
+};

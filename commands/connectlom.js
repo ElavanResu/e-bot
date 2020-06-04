@@ -17,7 +17,7 @@ module.exports = {
 	name: 'connectlom',
 	description: 'Connects to ElavanResu\'s server',
 	execute(message, args) {
-    if (message.author.id !== '234249678328299520') return message.channel.send('You\'re not allowed to use this command.');
+		if (message.author.id !== '234249678328299520') return message.channel.send('You\'re not allowed to use this command.');
 
 		console.log('connected tolom');
 		const hook = new Discord.WebhookClient(`${process.env.HOOKID}`, `${process.env.HOOKTOKEN}`);
@@ -62,8 +62,8 @@ module.exports = {
 					},
 					image: {
 						url: 'https://upload.wikimedia.org/wikipedia/commons/5/5a/A_picture_from_China_every_day_108.jpg',
-          },
-          timestamp: new Date(),
+					},
+					timestamp: new Date(),
 					footer: {
 						text: 'Woah! So cool! :smirk:',
 						icon_url: 'https://i.imgur.com/fKL31aD.jpg',
