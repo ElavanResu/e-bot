@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Jun 02 2020
+ * Last Modified: Fri Jun 05 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -29,7 +29,7 @@ const userTable = {
 		evadeBot: false,
 		bellowElavan: true,
 		showOnMention: true,
-		everytime: true,
+		everytime: false,
 	},
 	being: {
 		id: '312541974844669952',
@@ -38,7 +38,7 @@ const userTable = {
 		evadeBot: false,
 		bellowElavan: true,
 		showOnMention: true,
-		everytime: true,
+		everytime: false,
 	},
 	pushkie: {
 		id: '686973497250938929',
@@ -47,7 +47,7 @@ const userTable = {
 		evadeBot: false,
 		bellowElavan: true,
 		showOnMention: false,
-		everytime: true,
+		everytime: false,
 	},
 	// pounder: {
 	// 	id: '213519729296539648',
@@ -89,7 +89,7 @@ const userTable = {
 		evadeBot: false,
 		bellowElavan: true,
 		showOnMention: true,
-		everytime: true,
+		everytime: false,
 	},
 };
 
