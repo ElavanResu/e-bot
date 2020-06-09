@@ -2,9 +2,10 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, showNotification } = require('./config.json');
-// const { config } = require('dotenv');
+const { config } = require('dotenv');
 const { initiateReactionAlgo } = require('./features/reactions');
 const { logDeletedMessages } = require('./features/logs');
+const badWordExterminator = require('./features/badWordExterminator');
 // Creating client instance
 const client = new Discord.Client();
 
@@ -48,6 +49,10 @@ process.on('unhandledRejection', error => {
 });
 
 client.on('message', async message => {
+	if (badWordExterminator(message)) {
+		console.log('return');
+		return null;
+	}
 	const userElavan = message.mentions.users.get('234249678328299520');
 	try {
 		await initiateReactionAlgo(message);
@@ -118,7 +123,7 @@ client.on('message', async message => {
 	}
 
 	try {
-		command.execute(message, args);
+		await command.execute(message, args);
 	} catch (error) {
 		console.error(`Error in ||${commandName}|| command: `, error);
 		message.reply('There was an error in executing the command.');
@@ -126,7 +131,7 @@ client.on('message', async message => {
 });
 
 // log in to discord to make the bot online
-// config({
-// 	path: __dirname + '/.env'
-// });
+config({
+	path: __dirname + '/.env'
+});
 client.login(process.env.TOKEN);
