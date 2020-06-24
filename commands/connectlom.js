@@ -16,6 +16,7 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'connectlom',
 	description: 'Connects to ElavanResu\'s server',
+	guildOnly: true,
 	execute(message, args) {
 		if (message.author.id !== '234249678328299520') return message.channel.send('You\'re not allowed to use this command.');
 

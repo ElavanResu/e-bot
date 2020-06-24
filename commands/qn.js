@@ -2,6 +2,7 @@ module.exports = {
 	name: 'qn',
 	description: 'Asks question to bot',
 	usage: '<question>',
+	guildOnly: true,
 	execute(message, args) {
 		if (!args.length) return message.channel.send('Provide one question.');
 		const question = args.splice(0, args.length).toString().toLowerCase().replace(/[, ]+/g, ' ');

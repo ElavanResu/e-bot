@@ -48,7 +48,10 @@ process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 });
 
+const queue = new Map();
+
 client.on('message', async message => {
+	const musicQueue = queue.get(message.guild.id);
 	if (badWordExterminator(message)) {
 		console.log('return');
 		return null;
@@ -123,7 +126,7 @@ client.on('message', async message => {
 	}
 
 	try {
-		await command.execute(message, args);
+		await command.execute(message, args, musicQueue, queue);
 	} catch (error) {
 		console.error(`Error in ||${commandName}|| command: `, error);
 		message.reply('There was an error in executing the command.');

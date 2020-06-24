@@ -5,6 +5,7 @@ module.exports = {
 	aliases: ['icon', 'pfp'],
 	usage: '<mention users (optional)>',
 	description: 'Shows the avatar of the mentioned user. If no user is mentioned, then the avatar of author displayed',
+	guildOnly: true,
 	execute(message, args) {
 		if (!message.mentions.users.size) {
 			const embed = new Discord.MessageEmbed()

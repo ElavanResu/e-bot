@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'gn',
 	description: 'Wishes good nigh to people',
+	guildOnly: true,
 	execute(message, args) {
 		if (!message.mentions.users.size && message.author.id === '234249678328299520') {
 			return message.channel.send('Good night my master.');

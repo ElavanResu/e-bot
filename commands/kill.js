@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'kill',
 	description: 'Kill mentioned users',
+	guildOnly: true,
 	execute(message, args) {
 		console.log('mentions: ', message.mentions.users.size);
 		if (!message.mentions.users.size) {

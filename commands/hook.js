@@ -4,7 +4,7 @@
  * Created Date: Monday, May 25th 2020, 6:02:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Jun 05 2020
+ * Last Modified: Thu Jun 25 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -38,6 +38,7 @@ module.exports = {
 	name: 'hook',
 	description: 'Hooks',
 	args: true,
+	guildOnly: true,
 	execute(message, args) {
 		console.log('guild: ', message.guild);
 		let allow = false;

@@ -4,6 +4,7 @@ module.exports = {
 	cooldown: 15,
 	usage: '<mention user> <message (optional)>',
 	args: true,
+	guildOnly: true,
 	execute(message, args) {
 		if (!message.mentions.users.size) return message.channel.send('Dumbo, whom are you trying to annoy? You need to mention someone to annoy.');
 		if (!args[0].startsWith('<@')) return message.channel.send('Dumbo, whom are you trying to annoy? You need to mention someone to annoy.');
