@@ -1,22 +1,11 @@
-/**
- * File: /Users/shubham/ElavanResu/asach-bot/commands/leave.js
- * Project: /Users/shubham/ElavanResu/asach-bot
- * Created Date: Thursday, June 11th 2020, 9:45:55 pm
- * Author: Shubham Navale
- * -----
- * Last Modified: Thu Jun 25 2020
- * Modified By: Shubham Navale
- * -----
- * ------------------------------------
- * All Rights reserved
- */
+/* eslint-disable brace-style */
 /**
  * File: /Users/shubham/ElavanResu/asach-bot/commands/play.js
  * Project: /Users/shubham/ElavanResu/asach-bot
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 11 2020
+ * Last Modified: Thu Jun 25 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -33,11 +22,15 @@ module.exports = {
 		// Deletes the music queue of guild
 		queue.delete(message.guild.id);
 
-		const voiceChannel = message.member.voice.channel;
-		if (!voiceChannel) {
-			return message.channel.send('You are not on a voice channel');
+		try {
+			const voiceChannel = message.member.voice.channel;
+			if (!voiceChannel) {
+				return message.channel.send('You are not on a voice channel');
+			}
+			await message.react('😭');
+			voiceChannel.leave();
+		} catch (error) {
+			console.log(`error in disconnet music: ${error}`);
 		}
-
-		voiceChannel.leave();
 	},
 };

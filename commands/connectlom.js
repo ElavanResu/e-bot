@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * File: /Users/shubham/ElavanResu/asach-bot/commands/connectlom.js
  * Project: /Users/shubham/ElavanResu/asach-bot

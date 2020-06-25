@@ -1,3 +1,17 @@
+/* eslint-disable brace-style */
+/**
+ * File: /Users/shubham/ElavanResu/asach-bot/commands/annoy.js
+ * Project: /Users/shubham/ElavanResu/asach-bot
+ * Created Date: Saturday, May 23rd 2020, 11:12:38 am
+ * Author: Shubham Navale
+ * -----
+ * Last Modified: Thu Jun 25 2020
+ * Modified By: Shubham Navale
+ * -----
+ * ------------------------------------
+ * All Rights reserved
+ */
+
 module.exports = {
 	name: 'annoy',
 	description: 'Sends private messages to annoy mentioned user, with or without custom message',

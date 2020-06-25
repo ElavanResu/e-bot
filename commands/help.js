@@ -1,3 +1,17 @@
+/* eslint-disable no-unused-vars */
+/**
+ * File: /Users/shubham/ElavanResu/asach-bot/commands/help.js
+ * Project: /Users/shubham/ElavanResu/asach-bot
+ * Created Date: Friday, May 22nd 2020, 12:35:36 am
+ * Author: Shubham Navale
+ * -----
+ * Last Modified: Thu Jun 25 2020
+ * Modified By: Shubham Navale
+ * -----
+ * ------------------------------------
+ * All Rights reserved
+ */
+
 const { prefix } = require('../config.json');
 const Discord = require('discord.js');
 module.exports = {

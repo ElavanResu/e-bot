@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable brace-style */
+/* eslint-disable no-unused-vars */
 /**
- * File: /Users/shubham/ElavanResu/asach-bot/commands/n.js
+ * File: /Users/shubham/ElavanResu/asach-bot/commands/b.js
  * Project: /Users/shubham/ElavanResu/asach-bot
- * Created Date: Thursday, June 25th 2020, 12:47:28 am
+ * Created Date: Thursday, June 25th 2020, 6:15:15 pm
  * Author: Shubham Navale
  * -----
  * Last Modified: Thu Jun 25 2020
@@ -14,8 +14,8 @@
  */
 
 module.exports = {
-	name: 'n',
-	description: 'Skips the current song',
+	name: 'b',
+	description: 'Player moves back by one song',
 	args: false,
 	usage: '',
 	guildOnly: true,
@@ -27,13 +27,15 @@ module.exports = {
 
 		try {
 			if (!musicQueue) return message.channel.send('There is no song that I could skip!');
-			// if (musicQueue.songPosition === musicQueue.songs.length - 1) {
-			// 	return message.channel.send(`At the end of playlist, can\'t skip.`);
-			// }
-			await message.react('⏭️');
+			console.log('songs before skip: ', musicQueue.songs);
+			if (musicQueue.songPosition === 0) {
+				return message.channel.send('Can\'t go back, this is the first song in the list');
+			}
+			await message.react('⏮️');
+			musicQueue.songPosition = musicQueue.songPosition - 2;
 			musicQueue.connection.dispatcher.end();
 		} catch (error) {
-			console.log(`Error in going forward: ${error}`);
+			console.log(`Error in going back: ${error}`);
 		}
 	},
 };

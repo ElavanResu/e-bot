@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * File: /Users/shubham/ElavanResu/asach-bot/commands/pause.js
  * Project: /Users/shubham/ElavanResu/asach-bot
@@ -14,15 +15,14 @@ module.exports = {
 	name: 'pause',
 	description: 'Pauses the current song',
 	args: false,
-  usage: '',
-  guildOnly: true,
+	usage: '',
+	guildOnly: true,
 	async execute(message, args, musicQueue, queue) {
-    const voiceChannel = message.member.voice.channel;
-    if (!voiceChannel) {
+		const voiceChannel = message.member.voice.channel;
+		if (!voiceChannel) {
 			return message.channel.send('You are not on a voice channel');
-    }
-
-    if (!musicQueue) return message.channel.send('There is no song that I could skip!');
-	  musicQueue.connection.dispatcher.end();
+		}
+		if (!musicQueue) return message.channel.send('There is no song that I could skip!');
+		musicQueue.connection.dispatcher.end();
 	},
 };

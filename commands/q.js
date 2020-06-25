@@ -1,0 +1,65 @@
+/* eslint-disable brace-style */
+/* eslint-disable no-unused-vars */
+/**
+ * File: /Users/shubham/ElavanResu/asach-bot/commands/q.js
+ * Project: /Users/shubham/ElavanResu/asach-bot
+ * Created Date: Thursday, June 25th 2020, 7:26:55 pm
+ * Author: Shubham Navale
+ * -----
+ * Last Modified: Thu Jun 25 2020
+ * Modified By: Shubham Navale
+ * -----
+ * ------------------------------------
+ * All Rights reserved
+ */
+const Discord = require('discord.js');
+
+module.exports = {
+	name: 'q',
+	description: 'Displays the queue',
+	args: false,
+	usage: '',
+	guildOnly: true,
+	async execute(message, args, musicQueue, queue) {
+		const voiceChannel = message.member.voice.channel;
+		if (!voiceChannel) {
+			return message.channel.send('You are not on a voice channel');
+		}
+
+		try {
+			if (!musicQueue) {
+				const emptyQueueEmbed = new Discord.MessageEmbed()
+					.setColor('#3EFEFF')
+					.setDescription('There is nothing in the queue! ☹️');
+				return message.channel.send(emptyQueueEmbed);
+			}
+			const queueEmbed = new Discord.MessageEmbed()
+				.setColor('#3EFEFF');
+
+			let list = '';
+			for (let songCount = 0; songCount < musicQueue.songs.length; songCount++) {
+				if (musicQueue.songPosition === songCount) {
+					list = list + `**${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})** \n`;
+				} else {
+					list = list + `${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url}) \n`;
+				}
+			}
+			queueEmbed.setDescription(list);
+			message.channel.send(queueEmbed);
+			// const helpEmbed = new Discord.MessageEmbed()
+			// .setColor('#3EFEFF')
+			// .setDescription(command.description)
+			// .setTitle(command.name)
+			// .setTimestamp()
+			// .setFooter(`Asked by ${message.author.username}`);
+
+			// if (command.description) helpEmbed.setDescription(command.description);
+			// if (command.aliases) helpEmbed.addField('Aliases', `${command.aliases.join(', ')}`);
+			// if (command.usage) helpEmbed.addField('Usage', `${prefix}${command.name} ${command.usage}`);
+			// helpEmbed.addField('Cooldown', `${command.cooldown || 3} second(s)`);
+			// message.channel.send(helpEmbed);
+		} catch (error) {
+			console.log(`Error in going back: ${error}`);
+		}
+	},
+};

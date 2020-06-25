@@ -1,3 +1,5 @@
+/* eslint-disable no-lonely-if */
+/* eslint-disable brace-style */
 /**
  * File: /Users/shubham/ElavanResu/asach-bot/commands/play.js
  * Project: /Users/shubham/ElavanResu/asach-bot
@@ -12,9 +14,9 @@
  */
 const ytdl = require('ytdl-core');
 const yts = require('yt-search');
-const search = require('yt-search');
+const Discord = require('discord.js');
 
-const play = (queue, guild, song) => {
+const play = (message, queue, guild, song) => {
 	const musicQueue = queue.get(guild.id);
 
 	if (!song) {
@@ -23,12 +25,18 @@ const play = (queue, guild, song) => {
 		return;
 	}
 
+	const nowPlayingEmbed = new Discord.MessageEmbed()
+		.setColor('#3EFEFF')
+		.setTitle('**Now Playing**')
+		.setDescription(`[${song.title}](${song.url})`);
+	message.channel.send(nowPlayingEmbed);
+
 	const dispatcher = musicQueue.connection.play(ytdl(song.url));
 
 	dispatcher.on('finish', () => {
 		console.log('Music ended!');
-		musicQueue.songs.shift();
-		play(queue, guild, musicQueue.songs[0]);
+		musicQueue.songPosition++;
+		play(message, queue, guild, musicQueue.songs[musicQueue.songPosition]);
 	});
 
 	dispatcher.setVolumeLogarithmic(musicQueue.volume / 5);
@@ -61,11 +69,20 @@ module.exports = {
 				console.log('Info: ', JSON.stringify(info.playerResponse.videoDetails.title));
 				song.title = info.playerResponse.videoDetails.title;
 				song.url = searchString;
+				await message.react('🖕');
 			} else {
 				const results = await yts(searchString);
-				song.title = results.videos[0].title;
-				song.url = results.videos[0].url;
+				console.log('yts results: ', results.videos[0]);
+				console.log('length: ', results.videos.length);
+				console.log('song: ', song);
+				if (results.videos.length > 0) {
+					console.log('here');
+					song.title = results.videos[0].title;
+					song.url = results.videos[0].url;
+					await message.react('🖕');
+				}
 			}
+			console.log('song after assignment: ', song);
 			// const results = await youtubeV3.search.list({
 			// 	part: 'snippet',
 			// 	type: 'video',
@@ -87,19 +104,30 @@ module.exports = {
 					connection: null,
 					songs: [],
 					volume: 5,
+					songPosition: 0,
 					playing: true,
 				};
 				const connection = await voiceChannel.join();
 				queueContruct.connection = connection;
-				queueContruct.songs.push(song);
-				queue.set(message.guild.id, queueContruct);
-				play(queue, message.guild, queueContruct.songs[0]);
+				if (song.title !== undefined) {
+					queueContruct.songs.push(song);
+					queue.set(message.guild.id, queueContruct);
+					play(message, queue, message.guild, queueContruct.songs[queueContruct.songPosition]);
+				} else {
+					return message.channel.send(`(if) No results for \`${searchString}\``);
+				}
 			} else {
-				musicQueue.songs.push(song);
-				return message.channel.send(`${song.title} has been added to the queue!`);
+				if (song.title !== undefined) {
+					musicQueue.songs.push(song);
+					return message.channel.send(`${song.title} has been added to the queue!`);
+				} else {
+					console.log('song.title: ', song.title);
+					return message.channel.send(`(else) No results for \`${searchString}\``);
+				}
 			}
 		} catch (error) {
 			console.log('error: ', error);
+			message.channel.send(`Error in play method: ${error}`);
 		}
 	},
 };

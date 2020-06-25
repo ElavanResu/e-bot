@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 // adding packages
 const Discord = require('discord.js');
 const fs = require('fs');
@@ -53,7 +54,6 @@ const queue = new Map();
 client.on('message', async message => {
 	const musicQueue = queue.get(message.guild.id);
 	if (badWordExterminator(message)) {
-		console.log('return');
 		return null;
 	}
 	const userElavan = message.mentions.users.get('234249678328299520');
@@ -70,7 +70,6 @@ client.on('message', async message => {
 			}
 		}
 	}
-	console.log(message.content);
 	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);

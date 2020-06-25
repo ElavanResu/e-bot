@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * File: /Users/shubham/ElavanResu/asach-bot/commands/s.js
  * Project: /Users/shubham/ElavanResu/asach-bot

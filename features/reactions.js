@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Jun 09 2020
+ * Last Modified: Thu Jun 25 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -94,7 +94,6 @@ const userTable = {
 };
 
 const initiateReactionAlgo = async (message) => {
-	console.log('react')
 	const allUsers = Object.keys(userTable);
 	for (let userCount = 0; userCount < allUsers.length; userCount++) {
 		const userObject = userTable[allUsers[userCount]];

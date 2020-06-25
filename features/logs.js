@@ -1,10 +1,11 @@
+/* eslint-disable brace-style */
 /**
  * File: /Users/shubham/ElavanResu/asach-bot/features/logDeletedMessages.js
  * Project: /Users/shubham/ElavanResu/asach-bot
  * Created Date: Thursday, June 4th 2020, 2:05:00 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Jun 05 2020
+ * Last Modified: Thu Jun 25 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
