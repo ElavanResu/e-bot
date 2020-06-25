@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 module.exports = {
 	name: 'reload',
 	aliases: ['rld'],

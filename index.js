@@ -1,8 +1,12 @@
+/* eslint-disable brace-style */
 // adding packages
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, showNotification } = require('./config.json');
-const { config } = require('dotenv');
+// const { config } = require('dotenv');
+const { initiateReactionAlgo } = require('./features/reactions');
+const { logDeletedMessages } = require('./features/logs');
+const badWordExterminator = require('./features/badWordExterminator');
 // Creating client instance
 const client = new Discord.Client();
 
@@ -16,6 +20,15 @@ for (const file of commandFiles) {
 }
 
 const cooldowns = new Discord.Collection();
+
+
+client.on('messageDelete', async message => {
+	if (!parseInt(process.env.DISABLELOGS)) {
+		logDeletedMessages(message);
+	}
+});
+
+
 // logging
 client.on('ready', () => {
 	client.user.setPresence({
@@ -36,24 +49,19 @@ process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 });
 
+const queue = new Map();
+
 client.on('message', async message => {
-
-	const userElavan = message.mentions.users.get('234249678328299520');
-	const matchedWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
-	if ((userElavan !== undefined || matchedWords !== null) && message.author.id !== '712367845572345977') {
-		try {
-			await message.react('🇪');
-			await message.react('🇱');
-			await message.react('🅰️');
-			await message.react('🇻');
-			await message.react('🇦');
-			await message.react('🇳');
-		} catch (error) {
-			console.error('One of the emojis failed to react');
-		}
+	const musicQueue = queue.get(message.guild.id);
+	if (badWordExterminator(message)) {
+		return null;
 	}
-
-
+	const userElavan = message.mentions.users.get('234249678328299520');
+	try {
+		await initiateReactionAlgo(message);
+	} catch (error) {
+		console.log('Error in initiateReactionAlgo at index.js: ', error);
+	}
 
 	if (showNotification && message.mentions.users.size && message.author.id !== '234249678328299520' && message.author.id !== '712367845572345977') {
 		if (userElavan !== undefined) {
@@ -62,13 +70,17 @@ client.on('message', async message => {
 			}
 		}
 	}
-	console.log(message.content);
 	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
 	console.log('args: ', args);
 	const commandName = args.shift().toLowerCase();
-	console.log('command: ', commandName);
+	console.log('command1: ', commandName);
+	if (commandName === 'leaveconfirm' && message.author.id === '234249678328299520') {
+		message.channel.send('Good bye.');
+		await message.guild.leave();
+		return;
+	}
 
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
@@ -113,7 +125,7 @@ client.on('message', async message => {
 	}
 
 	try {
-		command.execute(message, args);
+		await command.execute(message, args, musicQueue, queue);
 	} catch (error) {
 		console.error(`Error in ||${commandName}|| command: `, error);
 		message.reply('There was an error in executing the command.');
@@ -121,7 +133,7 @@ client.on('message', async message => {
 });
 
 // log in to discord to make the bot online
-config({
-	path: __dirname + '/.env'
-});
+// config({
+// 	path: __dirname + '/.env'
+// });
 client.login(process.env.TOKEN);

@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'prune',
 	description: 'Deletes messages by taking the number of messages to delete from 2 to 50',
+	guildOnly: true,
 	execute(message, args) {
 		console.log('args: ', args);
 		const amount = parseInt(args[0]) + 1;
