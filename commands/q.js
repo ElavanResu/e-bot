@@ -6,7 +6,7 @@
  * Created Date: Thursday, June 25th 2020, 7:26:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Fri Jun 26 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -45,15 +45,16 @@ module.exports = {
 					.setDescription('There is nothing in the queue! ☹️');
 				return message.channel.send(emptyQueueEmbed);
 			}
+			await message.react('🗒️');
 			const queueEmbed = new Discord.MessageEmbed()
 				.setColor('#3EFEFF');
 
 			let list = '';
 			for (let songCount = 0; songCount < musicQueue.songs.length; songCount++) {
 				if (musicQueue.songPosition === songCount) {
-					list = list + `**${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})** \n`;
+					list = list + `**${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>]** \n`;
 				} else {
-					list = list + `${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url}) \n`;
+					list = list + `${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>] \n`;
 				}
 			}
 			queueEmbed.setDescription(list);
