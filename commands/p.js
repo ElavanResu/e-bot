@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Fri Jun 26 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -29,7 +29,7 @@ const play = (message, queue, guild, song) => {
 	const nowPlayingEmbed = new Discord.MessageEmbed()
 		.setColor('#3EFEFF')
 		.setTitle('**Now Playing**')
-		.setDescription(`[${song.title}](${song.url})`);
+		.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`);
 	message.channel.send(nowPlayingEmbed);
 
 	const dispatcher = musicQueue.connection.play(ytdl(song.url));
@@ -81,6 +81,7 @@ module.exports = {
 				console.log('Info: ', JSON.stringify(info.playerResponse.videoDetails.title));
 				song.title = info.playerResponse.videoDetails.title;
 				song.url = searchString;
+				song.requestedBy = message.author.id;
 				await message.react('🖕');
 			} else {
 				const results = await yts(searchString);
@@ -91,6 +92,7 @@ module.exports = {
 					console.log('here');
 					song.title = results.videos[0].title;
 					song.url = results.videos[0].url;
+					song.requestedBy = message.author.id;
 					await message.react('🖕');
 				}
 			}
@@ -133,8 +135,8 @@ module.exports = {
 					musicQueue.songs.push(song);
 					const addToQueueEmbed = new Discord.MessageEmbed()
 						.setColor('#3EFEFF')
-						.setTitle('**Add To Queue**')
-						.setDescription(`[${song.title}](${song.url})`);
+						.setTitle('**Added To Queue**')
+						.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`);
 					return message.channel.send(addToQueueEmbed);
 				} else {
 					console.log('song.title: ', song.title);
