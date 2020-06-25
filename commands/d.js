@@ -11,6 +11,7 @@
  * ------------------------------------
  * All Rights reserved
  */
+const musicWhitelist = require('../metaData/musicWhiteList');
 
 module.exports = {
 	name: 'd',
@@ -18,7 +19,18 @@ module.exports = {
 	args: false,
 	usage: '',
 	guildOnly: true,
+	aliases: ['die', 'disconnect'],
 	async execute(message, args, musicQueue, queue) {
+		let allow = false;
+		for(let count = 0; count < musicWhitelist.length; count++) {
+			if (message.author.id === musicWhitelist[count].id) {
+				allow = true;
+				break;
+			}
+		}
+		if (!allow) {
+			return message.channel.send('You are not allowed to use my music feature.');
+		}
 		// Deletes the music queue of guild
 		queue.delete(message.guild.id);
 

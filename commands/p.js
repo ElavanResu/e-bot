@@ -15,6 +15,7 @@
 const ytdl = require('ytdl-core');
 const yts = require('yt-search');
 const Discord = require('discord.js');
+const musicWhitelist = require('../metaData/musicWhiteList');
 
 const play = (message, queue, guild, song) => {
 	const musicQueue = queue.get(guild.id);
@@ -46,9 +47,20 @@ module.exports = {
 	name: 'p',
 	description: 'Plays music from youtube',
 	args: true,
-	usage: '<youtube video link>',
+	usage: '<youtube video link> or <song name>',
 	guildOnly: true,
+	aliases: ['play'],
 	async execute(message, args, musicQueue, queue) {
+		let allow = false;
+		for(let count = 0; count < musicWhitelist.length; count++) {
+			if (message.author.id === musicWhitelist[count].id) {
+				allow = true;
+				break;
+			}
+		}
+		if (!allow) {
+			return message.channel.send('You are not allowed to use my music feature.');
+		}
 		try {
 			const voiceChannel = message.member.voice.channel;
 
@@ -119,7 +131,11 @@ module.exports = {
 			} else {
 				if (song.title !== undefined) {
 					musicQueue.songs.push(song);
-					return message.channel.send(`${song.title} has been added to the queue!`);
+					const addToQueueEmbed = new Discord.MessageEmbed()
+						.setColor('#3EFEFF')
+						.setTitle('**Add To Queue**')
+						.setDescription(`[${song.title}](${song.url})`);
+					return message.channel.send(addToQueueEmbed);
 				} else {
 					console.log('song.title: ', song.title);
 					return message.channel.send(`(else) No results for \`${searchString}\``);
