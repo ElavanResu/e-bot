@@ -4,14 +4,14 @@
  * Created Date: Tuesday, June 9th 2020, 11:29:38 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Aug 02 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
 module.exports = (message) => {
-	const existHaremWord = message.content.toLowerCase().match(/spoof|spoofer|spoofers|spoofs/g);
+	const existHaremWord = message.content.toLowerCase().match(/shubham|navale/g);
 	if (existHaremWord !== null) {
 		message.delete();
 		return true;
