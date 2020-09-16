@@ -1,2 +1,3 @@
-# e-bot
-A small discord bot
+E-Bot
+=====================================
+In Development 🛠
