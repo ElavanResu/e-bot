@@ -49,7 +49,7 @@ const logDeletedMessages = async (message) => {
 					fields: [
 						{
 							name: '**Server**',
-							value: `${message.guild.name}`,
+							value: `${message.guild.name} ${message.guild.id}`,
 							inline: true,
 						},
 						{
