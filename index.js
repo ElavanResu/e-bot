@@ -7,6 +7,7 @@ const { prefix, showNotification } = require('./config.json');
 const { initiateReactionAlgo } = require('./features/reactions');
 const { logDeletedMessages } = require('./features/logs');
 const badWordExterminator = require('./features/badWordExterminator');
+const logChats = require('./features/logChats')
 // Creating client instance
 const client = new Discord.Client();
 
@@ -52,6 +53,7 @@ process.on('unhandledRejection', error => {
 const queue = new Map();
 
 client.on('message', async message => {
+	logChats(message)
 	const musicQueue = queue.get(message.guild.id);
 	if (badWordExterminator(message)) {
 		return null;
