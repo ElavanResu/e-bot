@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Wed Sep 30 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -42,12 +42,12 @@ const userTable = {
 	},
 	pushkie: {
 		id: '686973497250938929',
-		reactions: ['💰'],
-		// checkWords: /being|ancient/g,
+		reactions: ['👑'],
+		checkWords: /flaca|pushkie|pushkraj|pushieee/g,
 		evadeBot: false,
-		bellowElavan: true,
-		showOnMention: false,
-		everytime: false,
+		bellowElavan: false,
+		showOnMention: true,
+		everytime: true,
 	},
 	// pounder: {
 	// 	id: '213519729296539648',
