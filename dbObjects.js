@@ -57,4 +57,11 @@ const getEmojiCode = async (emojiName) => {
   }
 }
 
-module.exports = { addCustomEmoji, getEmojiCode }
+const getEmojiList = async () => {
+  const emojiList = await CustomEmojis.findAll({
+    attributes: ['emoji_name']
+  })
+  return emojiList
+}
+
+module.exports = { addCustomEmoji, getEmojiCode, getEmojiList }
