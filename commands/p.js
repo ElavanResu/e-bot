@@ -6,16 +6,18 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Jun 26 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
 const ytdl = require('ytdl-core');
-const yts = require('yt-search');
 const Discord = require('discord.js');
 const musicWhitelist = require('../metaData/musicWhiteList');
+const spotifyHandelr = require('../commandHandlers/p/spotifyHandler');
+const youtubeHandler = require('../commandHandlers/p/youtubeHandler');
+const searchHandler = require('../commandHandlers/p/searchHandler');
 
 const play = (message, queue, guild, song) => {
 	const musicQueue = queue.get(guild.id);
@@ -51,64 +53,55 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['play'],
 	async execute(message, args, musicQueue, queue) {
-		let allow = false;
-		for(let count = 0; count < musicWhitelist.length; count++) {
-			if (message.author.id === musicWhitelist[count].id) {
-				allow = true;
-				break;
-			}
-		}
-		if (!allow) {
-			return message.channel.send('You are not allowed to use my music feature.');
-		}
+		// let allow = false;
+		// for(let count = 0; count < musicWhitelist.length; count++) {
+		// 	if (message.author.id === musicWhitelist[count].id) {
+		// 		allow = true;
+		// 		break;
+		// 	}
+		// }
+		// if (!allow) {
+		// 	return message.channel.send('You are not allowed to use the music feature.');
+		// }
 		try {
 			const voiceChannel = message.member.voice.channel;
-
+			if (!voiceChannel) {
+				return message.channel.send(
+					new Discord.MessageEmbed()
+						.setColor('#3EFEFF')
+						.setDescription(`You need to join a voice channel.`)
+				)
+			}
 			const permissions = voiceChannel.permissionsFor(message.client.user);
 			if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
 				return message.channel.send('I need the permissions to join and speak in your voice channel!');
 			}
 
-			if (!voiceChannel) {
-				return message.channel.send('You need to join a voice channel.');
-			}
-
 
 			const searchString = args.toString().replace(/[, ]+/g, ' ');
-			const song = {};
+			let newSongsQueue = [];
 			if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
-				const info = await ytdl.getBasicInfo(searchString);
-				console.log('Info: ', JSON.stringify(info.playerResponse.videoDetails.title));
-				song.title = info.playerResponse.videoDetails.title;
-				song.url = searchString;
-				song.requestedBy = message.author.id;
-				await message.react('🖕');
+				newSongsQueue = await youtubeHandler(message, searchString)
+			} else if (searchString.includes('https://open.spotify.com')) {
+				newSongsQueue = await spotifyHandelr(message, searchString)
+				await message.react('🎵')
+				if (newSongsQueue.length === 0) {
+					return message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setDescription(`Error in loading the playlist`)
+					)
+				}
 			} else {
-				const results = await yts(searchString);
-				console.log('yts results: ', results.videos[0]);
-				console.log('length: ', results.videos.length);
-				console.log('song: ', song);
-				if (results.videos.length > 0) {
-					console.log('here');
-					song.title = results.videos[0].title;
-					song.url = results.videos[0].url;
-					song.requestedBy = message.author.id;
-					await message.react('🖕');
+				newSongsQueue = await searchHandler(message, searchString)
+				if (newSongsQueue.length === 0) {
+					return message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setDescription(`No results found for **${searchString}**`)
+					)
 				}
 			}
-			console.log('song after assignment: ', song);
-			// const results = await youtubeV3.search.list({
-			// 	part: 'snippet',
-			// 	type: 'video',
-			// 	q: args.toString().replace(/[, ]+/g, ' '),
-			// 	maxResults: 1,
-			// 	// order: 'viewCount',
-			// 	safeSearch: 'none',
-			// 	// videoEmbeddable: true,
-			// 	key: process.env.YOUTUBEAPIKEY,
-			// });
-
-			// const videoId = results.data.items[0].id.videoId;
 
 			let queueContruct;
 			if (!musicQueue) {
@@ -120,32 +113,50 @@ module.exports = {
 					volume: 5,
 					songPosition: 0,
 					playing: true,
-				};
-				const connection = await voiceChannel.join();
-				queueContruct.connection = connection;
-				if (song.title !== undefined) {
-					queueContruct.songs.push(song);
-					queue.set(message.guild.id, queueContruct);
-					play(message, queue, message.guild, queueContruct.songs[queueContruct.songPosition]);
-				} else {
-					return message.channel.send(`(if) No results for \`${searchString}\``);
 				}
-			} else {
-				if (song.title !== undefined) {
-					musicQueue.songs.push(song);
-					const addToQueueEmbed = new Discord.MessageEmbed()
-						.setColor('#3EFEFF')
-						.setTitle('**Added To Queue**')
-						.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`);
-					return message.channel.send(addToQueueEmbed);
+				const connection = await voiceChannel.join()
+				queueContruct.connection = connection
+				queueContruct.songs = [...newSongsQueue]
+				queue.set(message.guild.id, queueContruct)
+				if (newSongsQueue.length < 2) {
+					message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setTitle('**Added To Queue**')
+							.setDescription(`[${newSongsQueue[0].title}](${newSongsQueue[0].url}) [<@${newSongsQueue[0].requestedBy}>]`)
+					)
 				} else {
-					console.log('song.title: ', song.title);
-					return message.channel.send(`(else) No results for \`${searchString}\``);
+					message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setDescription(`${newSongsQueue.length} songs added to the queue`)
+					)
+				}
+				play(message, queue, message.guild, queueContruct.songs[queueContruct.songPosition])
+			} else {
+				musicQueue.songs = [...musicQueue.songs, ...newSongsQueue]
+				if (newSongsQueue.length < 2) {
+					return message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setTitle('**Added To Queue**')
+							.setDescription(`[${newSongsQueue[0].title}](${newSongsQueue[0].url}) [<@${newSongsQueue[0].requestedBy}>]`)
+					)
+				} else {
+					return message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setDescription(`${newSongsQueue.length} songs added to the queue`)
+					)
 				}
 			}
 		} catch (error) {
-			console.log('error: ', error);
-			message.channel.send(`Error in play method: ${error}`);
+			console.log('Error in play method: ', error);
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#3EFEFF')
+					.setDescription(`Couldn't process the song`)
+			)
 		}
 	},
 };

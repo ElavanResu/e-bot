@@ -6,7 +6,7 @@
  * Created Date: Thursday, June 25th 2020, 11:43:08 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -22,16 +22,16 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['resume'],
 	async execute(message, args, musicQueue, queue) {
-		let allow = false;
-		for(let count = 0; count < musicWhitelist.length; count++) {
-			if (message.author.id === musicWhitelist[count].id) {
-				allow = true;
-				break;
-			}
-		}
-		if (!allow) {
-			return message.channel.send('You are not allowed to use my music feature.');
-		}
+		// let allow = false;
+		// for(let count = 0; count < musicWhitelist.length; count++) {
+		// 	if (message.author.id === musicWhitelist[count].id) {
+		// 		allow = true;
+		// 		break;
+		// 	}
+		// }
+		// if (!allow) {
+		// 	return message.channel.send('You are not allowed to use my music feature.');
+		// }
 		try {
 			const voiceChannel = message.member.voice.channel;
 			if (!voiceChannel) {

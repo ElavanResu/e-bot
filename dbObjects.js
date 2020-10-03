@@ -4,45 +4,64 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Jun 09 2020
+ * Last Modified: Sat Oct 03 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-const Sequelize = require('sequelize');
+const Sequelize = require('sequelize')
+const { config } = require('dotenv')
+if (process.env.NODE_ENV !== 'production') {
+	config({
+		path: __dirname + '/.env'
+	})
+}
 
-const sequelize = new Sequelize('database', 'username', 'password', {
-	host: 'localhost',
-	dialect: 'sqlite',
+const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD, {
+	host: process.env.MYSQL_HOST,
+	dialect: 'mysql',
 	logging: false,
 	storage: 'database.sqlite',
-});
+})
 
-const Users = sequelize.import('models/Users');
-const CurrencyShop = sequelize.import('models/CurrencyShop');
-const UserItems = sequelize.import('models/UserItems');
+const CustomEmojis = require('./models/CustomEmojis')(sequelize, Sequelize.DataTypes)
 
-UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
+const addCustomEmoji = async (emojiName, emojiGlobalCode) => {
+  const emojiObject = await CustomEmojis.findOne({
+    where: { emoji_global_code: emojiGlobalCode }
+  })
 
-Users.prototype.addItem = async function(item) {
-  const userItem = await UserItems.findOne({
-    where: { user_id: this.user_id, item_id: item.id },
-  });
-
-  if (userItem) {
-    userItem.amount += 1;
-    return userItem.save();
+  if (!emojiObject) {
+    const customEmoji = await CustomEmojis.findOne({
+      where: { emoji_name: emojiName }
+    })
+    if (customEmoji) {
+      customEmoji.copies += 1
+      customEmoji.save()
+      return CustomEmojis.create({ emoji_name: `${emojiName}${customEmoji.copies}`, emoji_global_code: emojiGlobalCode, copies: 0 })
+    }
+    return CustomEmojis.create({ emoji_name: emojiName, emoji_global_code: emojiGlobalCode, copies: 0 })
   }
+}
 
-  return UserItems.create({ user_id: this.user_id, item_id: item.id, amount: 1 });
-};
+const getEmojiCode = async (emojiName) => {
+  const customEmoji = await CustomEmojis.findOne({
+    where: { emoji_name: emojiName }
+  })
 
-Users.prototype.getItems = function () {
-  return UserItems.findAll({
-    where: { user_id: this.user_id },
-    include: ['item'],
-  });
-};
+  if (customEmoji) {
+    return customEmoji.emoji_global_code
+  } else {
+    return null
+  }
+}
 
-module.exports = { Users, CurrencyShop, UserItems };
+const getEmojiList = async () => {
+  const emojiList = await CustomEmojis.findAll({
+    attributes: ['emoji_name']
+  })
+  return emojiList
+}
+
+module.exports = { addCustomEmoji, getEmojiCode, getEmojiList }
