@@ -5,7 +5,7 @@
  * Created Date: Thursday, June 4th 2020, 2:05:00 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Thu Oct 01 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -23,9 +23,7 @@ const logDeletedMessages = async (message) => {
 			type: 'MESSAGE_DELETE',
 		});
 
-		console.log('fetched lohs: ', fetchedLogs);
 		const msgToDelete = fetchedLogs.entries.first();
-		console.log('msgToDelete: ', msgToDelete);
 
 		if (!msgToDelete) return console.log(`A message by ${message.author.tag} was deleted, but no relevant audit logs were found`);
 

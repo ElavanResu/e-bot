@@ -4,7 +4,7 @@
  * Created Date: Monday, May 25th 2020, 6:02:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sat Oct 03 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -32,6 +32,10 @@ const whiteList = [
 		name: 'Molten',
 		id: '285661264099803137',
 	},
+	{
+		name: 'Pushieee',
+		id: '686973497250938929'
+	}
 ];
 
 module.exports = {

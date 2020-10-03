@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Sep 30 2020
+ * Last Modified: Thu Oct 01 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -109,16 +109,6 @@ const initiateReactionAlgo = async (message) => {
 		const checlElavanMention = message.mentions.users.get('234249678328299520');
 		const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
 		const checkElavan = !(userObject.bellowElavan && (checlElavanMention !== undefined || matchedElavanWords !== null));
-
-		// console.log(`------------------------${allUsers[userCount]}--------------------------`);
-		// console.log('checkeverytime: ', checkEverytime);
-		// console.log('mactchedWords: ', matchedWords);
-
-		// console.log('confirmReact: ', confirmReact);
-		// console.log('checkbot: ', checkBot);
-		// console.log('checkElavan: ', checkElavan);
-		// console.log('Final check: ', (checkElavan && (checkEverytime || confirmReact)) && checkBot);
-		// console.log('----------------------------------------------------------');
 
 		if ((checkElavan && (checkEverytime || confirmReact)) && checkBot) {
 			try {

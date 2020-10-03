@@ -3,11 +3,12 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const { prefix, showNotification } = require('./config.json');
-// const { config } = require('dotenv');
+const { config } = require('dotenv');
 const { initiateReactionAlgo } = require('./features/reactions');
 const { logDeletedMessages } = require('./features/logs');
 const badWordExterminator = require('./features/badWordExterminator');
 const logChats = require('./features/logChats')
+const captureCustomEmojis = require('./features/captureCustomEmojis')
 // Creating client instance
 const client = new Discord.Client();
 
@@ -54,6 +55,7 @@ const queue = new Map();
 
 client.on('message', async message => {
 	logChats(message)
+	captureCustomEmojis(message)
 	const musicQueue = queue.get(message.guild.id);
 	if (badWordExterminator(message)) {
 		return null;
@@ -75,9 +77,7 @@ client.on('message', async message => {
 	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).split(/ +/);
-	console.log('args: ', args);
 	const commandName = args.shift().toLowerCase();
-	console.log('command1: ', commandName);
 	if (commandName === 'leaveconfirm' && message.author.id === '234249678328299520') {
 		message.channel.send('Good bye.');
 		await message.guild.leave();
@@ -107,10 +107,8 @@ client.on('message', async message => {
 	}
 
 	const now = Date.now();
-	console.log('now: ', now);
 
 	const timeStamps = cooldowns.get(command.name);
-	console.log('timeStamps: ', JSON.stringify(timeStamps));
 
 	const cooldownAmount = (command.cooldown || 3) * 1000;
 
@@ -135,7 +133,9 @@ client.on('message', async message => {
 });
 
 // log in to discord to make the bot online
-// config({
-// 	path: __dirname + '/.env'
-// });
-client.login(process.env.TOKEN);
+if (process.env.NODE_ENV !== 'production') {
+	config({
+		path: __dirname + '/.env'
+	});
+}
+client.login(process.env.TOKEN)

@@ -5,7 +5,7 @@
  * Created Date: Friday, May 22nd 2020, 12:35:36 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Fri Oct 02 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -68,6 +68,7 @@ module.exports = {
 		if (command.description) helpEmbed.setDescription(command.description);
 		if (command.aliases) helpEmbed.addField('Aliases', `${command.aliases.join(', ')}`);
 		if (command.usage) helpEmbed.addField('Usage', `${prefix}${command.name} ${command.usage}`);
+		if (command.moreInfo) helpEmbed.addField('More Info', `${command.moreInfo}`);
 		helpEmbed.addField('Cooldown', `${command.cooldown || 3} second(s)`);
 		message.channel.send(helpEmbed);
 	},

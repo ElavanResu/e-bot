@@ -4,34 +4,39 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Jun 09 2020
+ * Last Modified: Sat Oct 03 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-const Sequelize = require('sequelize');
+const Sequelize = require('sequelize')
+const { config } = require('dotenv')
+if (process.env.NODE_ENV !== 'production') {
+	config({
+		path: __dirname + '/.env'
+	})
+}
 
-const sequelize = new Sequelize('database', 'username', 'password', {
+console.log('test: ', process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD)
+
+const sequelize = new Sequelize('ebot', process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD, {
 	host: 'localhost',
-	dialect: 'sqlite',
+	dialect: 'mysql',
 	logging: false,
 	storage: 'database.sqlite',
-});
+})
 
-const CurrencyShop = sequelize.import('models/CurrencyShop');
-sequelize.import('models/Users');
-sequelize.import('models/UserItems');
+const CustomEmoji = require('./models/CustomEmojis')(sequelize, Sequelize.DataTypes)
 
-const force = process.argv.includes('--force') || process.argv.includes('-f');
+const force = process.argv.includes('--force') || process.argv.includes('-f')
 
 sequelize.sync({ force }).then(async () => {
-  const shop = [
-    CurrencyShop.upsert({ name: 'Leg', cost: 1 }),
-		CurrencyShop.upsert({ name: 'Head', cost: 2 }),
-		CurrencyShop.upsert({ name: 'Hand', cost: 5 }),
-  ];
-  await Promise.all(shop);
-  console.log('Database synced');
-  sequelize.close();
-}).catch(console.error);
+  try {
+    await CustomEmoji.upsert({ emoji_name: 'NopeNope'.toLowerCase(), emoji_global_code: '<a:NopeNope:750875276040470539>', copies: 0 })
+    console.log('Database synced')
+    sequelize.close()
+  } catch (error) {
+    console.log('error: ', error)
+  }
+}).catch(console.error)
