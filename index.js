@@ -8,7 +8,8 @@ const { initiateReactionAlgo } = require('./features/reactions');
 const { logDeletedMessages } = require('./features/logs');
 const badWordExterminator = require('./features/badWordExterminator');
 const logChats = require('./features/logChats')
-const captureCustomEmojis = require('./features/captureCustomEmojis')
+const captureCustomEmojis = require('./features/captureCustomEmojis');
+const { initialiseSpotifyServices } = require('./services/spotifyServices');
 // Creating client instance
 const client = new Discord.Client();
 
@@ -32,7 +33,7 @@ client.on('messageDelete', async message => {
 
 
 // logging
-client.on('ready', () => {
+client.on('ready', async () => {
 	client.user.setPresence({
 		status: 'online',
 		activity: {
@@ -40,6 +41,11 @@ client.on('ready', () => {
 			type: 'PLAYING',
 		},
 	});
+	try {
+		await initialiseSpotifyServices()
+	} catch (error) {
+		console.log('Error in initialising spotify services: ', error)
+	}
 	console.log('Ready!', client.user.username);
 });
 
@@ -54,8 +60,10 @@ process.on('unhandledRejection', error => {
 const queue = new Map();
 
 client.on('message', async message => {
-	logChats(message)
-	captureCustomEmojis(message)
+	if (process.env.NODE_ENV === 'production') {
+		logChats(message)
+		captureCustomEmojis(message)
+	}
 	const musicQueue = queue.get(message.guild.id);
 	if (badWordExterminator(message)) {
 		return null;
@@ -94,8 +102,10 @@ client.on('message', async message => {
 		if (command.usage) {
 			reply += `\nThe proper usage would be:\n> ${prefix}${command.name} ${command.usage}`;
 		}
-
-		return message.channel.send(reply);
+		const cmdErrorEmbed = new Discord.MessageEmbed()
+		.setColor('#3EFEFF')
+		.setDescription(reply);
+		return message.channel.send(cmdErrorEmbed);
 	}
 
 	if (command.guildOnly && message.channel.type !== 'text') {
