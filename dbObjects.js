@@ -18,8 +18,8 @@ if (process.env.NODE_ENV !== 'production') {
 	})
 }
 
-const sequelize = new Sequelize('ebot', process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD, {
-	host: 'localhost',
+const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD, {
+	host: process.env.MYSQL_HOST,
 	dialect: 'mysql',
 	logging: false,
 	storage: 'database.sqlite',
@@ -33,19 +33,14 @@ const addCustomEmoji = async (emojiName, emojiGlobalCode) => {
   })
 
   if (!emojiObject) {
-    console.log('okay create')
     const customEmoji = await CustomEmojis.findOne({
       where: { emoji_name: emojiName }
     })
     if (customEmoji) {
       customEmoji.copies += 1
       customEmoji.save()
-      console.log('update and create')
-      console.log('emojiName', emojiName)
-      console.log('new emoji name: ', `${emojiName}${customEmoji.copies}`)
       return CustomEmojis.create({ emoji_name: `${emojiName}${customEmoji.copies}`, emoji_global_code: emojiGlobalCode, copies: 0 })
     }
-    console.log('first create')
     return CustomEmojis.create({ emoji_name: emojiName, emoji_global_code: emojiGlobalCode, copies: 0 })
   }
 }

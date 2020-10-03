@@ -18,10 +18,8 @@ if (process.env.NODE_ENV !== 'production') {
 	})
 }
 
-console.log('test: ', process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD)
-
-const sequelize = new Sequelize('ebot', process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD, {
-	host: 'localhost',
+const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_USERNAME, process.env.MYSQL_PASSWORD, {
+	host: process.env.MYSQL_HOST,
 	dialect: 'mysql',
 	logging: false,
 	storage: 'database.sqlite',
