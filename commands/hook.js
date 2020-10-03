@@ -4,7 +4,7 @@
  * Created Date: Monday, May 25th 2020, 6:02:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 03 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,26 +16,30 @@ const whiteList = [
 		name: 'ElavanResu',
 		id: '234249678328299520',
 	},
-	{
-		name: 'NiteBraek',
-		id: '403454311906148383',
-	},
+	// {
+	// 	name: 'NiteBraek',
+	// 	id: '403454311906148383',
+	// },
 	{
 		name: 'AncientBeing',
 		id: '312541974844669952',
 	},
 	{
-		name: 'Jaegar',
-		id: '427000717681885185',
+		name: 'Zaran',
+		id: '698270204496576633'
 	},
-	{
-		name: 'Molten',
-		id: '285661264099803137',
-	},
-	{
-		name: 'Pushieee',
-		id: '686973497250938929'
-	}
+	// {
+	// 	name: 'Jaegar',
+	// 	id: '427000717681885185',
+	// },
+	// {
+	// 	name: 'Molten',
+	// 	id: '285661264099803137',
+	// },
+	// {
+	// 	name: 'Pushieee',
+	// 	id: '686973497250938929'
+	// }
 ];
 
 module.exports = {
@@ -53,7 +57,7 @@ module.exports = {
 			}
 		}
 		if (!allow) {
-			return message.channel.send('You are not allowed to use slv hook.');
+			return message.channel.send('You are not allowed to use hook.');
 		}
 		message.delete();
 		if (!message.channel) return console.log('channel not specified');

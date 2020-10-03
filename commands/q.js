@@ -6,7 +6,7 @@
  * Created Date: Thursday, June 25th 2020, 7:26:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Jun 26 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -22,20 +22,38 @@ module.exports = {
 	usage: '',
 	guildOnly: true,
 	aliases: ['queue'],
+	cooldown: -1,
 	async execute(message, args, musicQueue, queue) {
-		let allow = false;
-		for(let count = 0; count < musicWhitelist.length; count++) {
-			if (message.author.id === musicWhitelist[count].id) {
-				allow = true;
-				break;
-			}
+		// let allow = false;
+		// for(let count = 0; count < musicWhitelist.length; count++) {
+		// 	if (message.author.id === musicWhitelist[count].id) {
+		// 		allow = true;
+		// 		break;
+		// 	}
+		// }
+		// if (!allow) {
+		// 	return message.channel.send('You are not allowed to use my music feature.');
+		// }
+		let listIndex
+		if (!musicQueue) return message.channel.send(
+			new Discord.MessageEmbed()
+				.setColor('#3EFEFF')
+				.setDescription('Add songs in the queue')
+		)
+		if ((Math.floor(musicQueue.songs.length / 10) + 1) < parseInt(args[0])) {
+			listIndex = Math.floor(musicQueue.songs.length / 10) + 1
 		}
-		if (!allow) {
-			return message.channel.send('You are not allowed to use my music feature.');
+		else if (!args[0] || parseInt(args[0]) > 0) {
+			listIndex = parseInt(args[0]) || 1
 		}
+
 		const voiceChannel = message.member.voice.channel;
 		if (!voiceChannel) {
-			return message.channel.send('You are not on a voice channel');
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#3EFEFF')
+					.setDescription('You are not on a voice channel')
+			)
 		}
 
 		try {
@@ -49,16 +67,26 @@ module.exports = {
 			const queueEmbed = new Discord.MessageEmbed()
 				.setColor('#3EFEFF');
 
-			let list = '';
-			for (let songCount = 0; songCount < musicQueue.songs.length; songCount++) {
+			let list = ''
+			let listLimit
+			let lowerLimit = (musicQueue.songs.length - (listIndex * 10 - 10))
+			if (lowerLimit < 10) {
+				listLimit = (listIndex * 10 - 10) + lowerLimit
+			} else {
+				listLimit = listIndex * 10
+			}
+			for (let songCount = (listIndex * 10) - 10; songCount < listLimit; songCount++) {
 				if (musicQueue.songPosition === songCount) {
 					list = list + `**${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>]** \n`;
 				} else {
 					list = list + `${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>] \n`;
 				}
 			}
-			queueEmbed.setDescription(list);
-			message.channel.send(queueEmbed);
+			if (list.length !== 0) {
+				queueEmbed.setDescription(list)
+				.setFooter(`${listIndex}/${Math.floor(musicQueue.songs.length / 10) + 1}`)
+				message.channel.send(queueEmbed);
+			}
 			// const helpEmbed = new Discord.MessageEmbed()
 			// .setColor('#3EFEFF')
 			// .setDescription(command.description)
@@ -72,7 +100,7 @@ module.exports = {
 			// helpEmbed.addField('Cooldown', `${command.cooldown || 3} second(s)`);
 			// message.channel.send(helpEmbed);
 		} catch (error) {
-			console.log(`Error in going back: ${error}`);
+			console.log(`Error in getting queue: ${error}`);
 		}
 	},
 };

@@ -84,20 +84,22 @@ module.exports = {
 				newSongsQueue = await youtubeHandler(message, searchString)
 			} else if (searchString.includes('https://open.spotify.com')) {
 				newSongsQueue = await spotifyHandelr(message, searchString)
-				await message.react('🖕')
+				await message.react('🎵')
 				if (newSongsQueue.length === 0) {
-					const songErrorEmbed = new Discord.MessageEmbed()
-					.setColor('#3EFEFF')
-					.setDescription(`Error in loading the playlist`);
-					return message.channel.send(songErrorEmbed);
+					return message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setDescription(`Error in loading the playlist`)
+					)
 				}
 			} else {
 				newSongsQueue = await searchHandler(message, searchString)
 				if (newSongsQueue.length === 0) {
-					const songErrorEmbed = new Discord.MessageEmbed()
-					.setColor('#3EFEFF')
-					.setDescription(`No results found for **${searchString}**`);
-					return message.channel.send(songErrorEmbed);
+					return message.channel.send(
+						new Discord.MessageEmbed()
+							.setColor('#3EFEFF')
+							.setDescription(`No results found for **${searchString}**`)
+					)
 				}
 			}
 
@@ -150,10 +152,11 @@ module.exports = {
 			}
 		} catch (error) {
 			console.log('Error in play method: ', error);
-			const songErrorEmbed = new Discord.MessageEmbed()
-			.setColor('#3EFEFF')
-			.setDescription(`Couldn't process the song`);
-			return message.channel.send(songErrorEmbed);
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#3EFEFF')
+					.setDescription(`Couldn't process the song`)
+			)
 		}
 	},
 };

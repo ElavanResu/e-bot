@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 11:20:09 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 03 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -15,7 +15,7 @@ const ytdl = require('ytdl-core')
 const youtubeHandler = async (message, searchString) => {
   try {
     const info = await ytdl.getBasicInfo(searchString)
-    await message.react('🖕')
+    await message.react('🎵')
     return [{
       title: info.playerResponse.videoDetails.title,
       url: searchString,

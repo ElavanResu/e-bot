@@ -16,7 +16,7 @@ const searchHandler = async (message, searchString) => {
   try {
     const results = await yts(searchString);
     if (results.videos.length > 0) {
-      await message.react('🖕');
+      await message.react('🎵');
       return [{
         title: results.videos[0].title,
         url: results.videos[0].url,
