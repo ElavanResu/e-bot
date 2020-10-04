@@ -5,13 +5,14 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-const musicWhitelist = require('../metaData/musicWhiteList');
+const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
+const Discord = require('discord.js')
 
 module.exports = {
 	name: 'd',
@@ -19,30 +20,27 @@ module.exports = {
 	args: false,
 	usage: '',
 	guildOnly: true,
-	aliases: ['die', 'disconnect'],
+	aliases: ['die', 'disconnect', 'shine'],
 	async execute(message, args, musicQueue, queue) {
-		let allow = false;
-		for(let count = 0; count < musicWhitelist.length; count++) {
-			if (message.author.id === musicWhitelist[count].id) {
-				allow = true;
-				break;
-			}
-		}
-		if (!allow) {
-			return message.channel.send('You are not allowed to use my music feature.');
+		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_disconnect')) {
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#A6011F')
+					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+			)
 		}
 		// Deletes the music queue of guild
-		queue.delete(message.guild.id);
+		queue.delete(message.guild.id)
 
 		try {
-			const voiceChannel = message.member.voice.channel;
+			const voiceChannel = message.member.voice.channel
 			if (!voiceChannel) {
-				return message.channel.send('You are not on a voice channel');
+				return message.channel.send('You are not on a voice channel')
 			}
-			await message.react('😭');
-			voiceChannel.leave();
+			await message.react('😭')
+			voiceChannel.leave()
 		} catch (error) {
-			console.log(`error in disconnet music: ${error}`);
+			console.log(`error in disconnet music: ${error}`)
 		}
-	},
-};
+	}
+}

@@ -5,14 +5,14 @@
  * Created Date: Thursday, May 21st 2020, 8:22:06 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
 
-const Discord = require('discord.js');
+const Discord = require('discord.js')
 
 module.exports = {
 	name: 'avatar',
@@ -27,9 +27,9 @@ module.exports = {
 				.setTitle('Your profile pic')
 				.setImage(`${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`)
 				.setTimestamp()
-				.setFooter(`${message.author.username}`, `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`);
+				.setFooter(`${message.author.username}`, `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`)
 
-			return message.channel.send(embed);
+			return message.channel.send(embed)
 		}
 
 		message.mentions.users.map(user => {
@@ -44,7 +44,7 @@ module.exports = {
 					text: `${message.author.username}`,
 					icon_url: `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`,
 				},
-			} });
-		});
-	},
-};
+			} })
+		})
+	}
+}

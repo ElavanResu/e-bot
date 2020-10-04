@@ -12,7 +12,8 @@
  * ------------------------------------
  * All Rights reserved
  */
-const musicWhitelist = require('../metaData/musicWhiteList');
+const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
+const Discord = require('discord.js')
 
 module.exports = {
 	name: 'n',
@@ -22,30 +23,27 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['next'],
 	async execute(message, args, musicQueue, queue) {
-		// let allow = false;
-		// for(let count = 0; count < musicWhitelist.length; count++) {
-		// 	if (message.author.id === musicWhitelist[count].id) {
-		// 		allow = true;
-		// 		break;
-		// 	}
-		// }
-		// if (!allow) {
-		// 	return message.channel.send('You are not allowed to use my music feature.');
-		// }
-		const voiceChannel = message.member.voice.channel;
+		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_next')) {
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#A6011F')
+					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+			)
+		}
+		const voiceChannel = message.member.voice.channel
 		if (!voiceChannel) {
-			return message.channel.send('You are not on a voice channel');
+			return message.channel.send('You are not on a voice channel')
 		}
 
 		try {
-			if (!musicQueue) return message.channel.send('There is no song that I could skip!');
+			if (!musicQueue) return message.channel.send('There is no song that I could skip!')
 			// if (musicQueue.songPosition === musicQueue.songs.length - 1) {
-			// 	return message.channel.send(`At the end of playlist, can\'t skip.`);
+			// 	return message.channel.send(`At the end of playlist, can\'t skip.`)
 			// }
-			await message.react('⏭️');
-			musicQueue.connection.dispatcher.end();
+			await message.react('⏭️')
+			musicQueue.connection.dispatcher.end()
 		} catch (error) {
-			console.log(`Error in going forward: ${error}`);
+			console.log(`Error in going forward: ${error}`)
 		}
-	},
-};
+	}
+}

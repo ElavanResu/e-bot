@@ -5,7 +5,7 @@
  * Created Date: Thursday, May 21st 2020, 7:49:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -18,6 +18,6 @@ module.exports = {
 	cooldown: 5,
 	guildOnly: true,
 	execute(message, args) {
-		message.channel.send('Dong.');
-	},
-};
+		message.channel.send('Dong.')
+	}
+}

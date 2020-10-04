@@ -12,8 +12,7 @@
  * ------------------------------------
  * All Rights reserved
  */
-const Discord = require('discord.js');
-const musicWhitelist = require('../metaData/musicWhiteList');
+const Discord = require('discord.js')
 
 module.exports = {
 	name: 'q',
@@ -24,15 +23,15 @@ module.exports = {
 	aliases: ['queue'],
 	cooldown: -1,
 	async execute(message, args, musicQueue, queue) {
-		// let allow = false;
+		// let allow = false
 		// for(let count = 0; count < musicWhitelist.length; count++) {
 		// 	if (message.author.id === musicWhitelist[count].id) {
-		// 		allow = true;
-		// 		break;
+		// 		allow = true
+		// 		break
 		// 	}
 		// }
 		// if (!allow) {
-		// 	return message.channel.send('You are not allowed to use my music feature.');
+		// 	return message.channel.send('You are not allowed to use my music feature.')
 		// }
 		let listIndex
 		if (!musicQueue) return message.channel.send(
@@ -47,7 +46,7 @@ module.exports = {
 			listIndex = parseInt(args[0]) || 1
 		}
 
-		const voiceChannel = message.member.voice.channel;
+		const voiceChannel = message.member.voice.channel
 		if (!voiceChannel) {
 			return message.channel.send(
 				new Discord.MessageEmbed()
@@ -60,12 +59,12 @@ module.exports = {
 			if (!musicQueue) {
 				const emptyQueueEmbed = new Discord.MessageEmbed()
 					.setColor('#3EFEFF')
-					.setDescription('There is nothing in the queue! ☹️');
-				return message.channel.send(emptyQueueEmbed);
+					.setDescription('There is nothing in the queue! ☹️')
+				return message.channel.send(emptyQueueEmbed)
 			}
-			await message.react('🗒️');
+			await message.react('🗒️')
 			const queueEmbed = new Discord.MessageEmbed()
-				.setColor('#3EFEFF');
+				.setColor('#3EFEFF')
 
 			let list = ''
 			let listLimit
@@ -77,30 +76,30 @@ module.exports = {
 			}
 			for (let songCount = (listIndex * 10) - 10; songCount < listLimit; songCount++) {
 				if (musicQueue.songPosition === songCount) {
-					list = list + `**${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>]** \n`;
+					list = list + `**${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>]** \n`
 				} else {
-					list = list + `${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>] \n`;
+					list = list + `${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>] \n`
 				}
 			}
 			if (list.length !== 0) {
 				queueEmbed.setDescription(list)
 				.setFooter(`${listIndex}/${Math.floor(musicQueue.songs.length / 10) + 1}`)
-				message.channel.send(queueEmbed);
+				message.channel.send(queueEmbed)
 			}
 			// const helpEmbed = new Discord.MessageEmbed()
 			// .setColor('#3EFEFF')
 			// .setDescription(command.description)
 			// .setTitle(command.name)
 			// .setTimestamp()
-			// .setFooter(`Asked by ${message.author.username}`);
+			// .setFooter(`Asked by ${message.author.username}`)
 
-			// if (command.description) helpEmbed.setDescription(command.description);
-			// if (command.aliases) helpEmbed.addField('Aliases', `${command.aliases.join(', ')}`);
-			// if (command.usage) helpEmbed.addField('Usage', `${prefix}${command.name} ${command.usage}`);
-			// helpEmbed.addField('Cooldown', `${command.cooldown || 3} second(s)`);
-			// message.channel.send(helpEmbed);
+			// if (command.description) helpEmbed.setDescription(command.description)
+			// if (command.aliases) helpEmbed.addField('Aliases', `${command.aliases.join(', ')}`)
+			// if (command.usage) helpEmbed.addField('Usage', `${prefix}${command.name} ${command.usage}`)
+			// helpEmbed.addField('Cooldown', `${command.cooldown || 3} second(s)`)
+			// message.channel.send(helpEmbed)
 		} catch (error) {
-			console.log(`Error in getting queue: ${error}`);
+			console.log(`Error in getting queue: ${error}`)
 		}
-	},
-};
+	}
+}

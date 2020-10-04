@@ -5,7 +5,7 @@
  * Created Date: Thursday, May 21st 2020, 8:20:41 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -17,6 +17,6 @@ module.exports = {
 	guildOnly: true,
 	description: 'Gives the intro',
 	execute(message, args) {
-		message.channel.send('Hi, I am a slave of ElavanResu.');
-	},
-};
+		message.channel.send('Hi, I am a slave of ElavanResu.')
+	}
+}

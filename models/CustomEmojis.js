@@ -4,13 +4,13 @@
  * Created Date: Saturday, October 3rd 2020, 12:39:52 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 03 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-module.exports = (sequelize, DataTypes) => {
+const customEmojisSchema = (sequelize, DataTypes) => {
   return sequelize.define('custom_emojis', {
     emoji_name: {
       type: DataTypes.STRING,
@@ -29,4 +29,56 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     timestamps: false
   })
+}
+
+const getEmojiList = async (SequelizeConnetion) => {
+  try {
+    const emojiList = await SequelizeConnetion.findAll({
+      attributes: ['emoji_name']
+    })
+    return emojiList
+  } catch (error) {
+    console.log('Error in getEmojiList: ', error)
+  }
+}
+
+const getEmojiCode = async (SequelizeConnetion, emojiName) => {
+  try {
+    const customEmoji = await SequelizeConnetion.findOne({
+      where: { emoji_name: emojiName }
+    })
+
+    if (customEmoji) {
+      return customEmoji.emoji_global_code
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.log('Error in getEmojiCode: ', error)
+  }
+}
+
+const addCustomEmoji = async (SequelizeConnetion, emojiName, emojiGlobalCode) => {
+  const emojiObject = await SequelizeConnetion.findOne({
+    where: { emoji_global_code: emojiGlobalCode }
+  })
+
+  if (!emojiObject) {
+    const customEmoji = await SequelizeConnetion.findOne({
+      where: { emoji_name: emojiName }
+    })
+    if (customEmoji) {
+      customEmoji.copies += 1
+      customEmoji.save()
+      return SequelizeConnetion.create({ emoji_name: `${emojiName}${customEmoji.copies}`, emoji_global_code: emojiGlobalCode, copies: 0 })
+    }
+    return SequelizeConnetion.create({ emoji_name: emojiName, emoji_global_code: emojiGlobalCode, copies: 0 })
+  }
+}
+
+module.exports = {
+  customEmojisSchema,
+  getEmojiList,
+  getEmojiCode,
+  addCustomEmoji
 }

@@ -17,6 +17,6 @@ module.exports = {
 	cooldown: -1,
 	guildOnly: true,
 	execute(message, args) {
-		message.channel.send('https://tenor.com/view/devdas-shah-rukhkhan-crying-sad-tears-gif-5228894');
-	},
-};
+		message.channel.send('https://tenor.com/view/devdas-shah-rukhkhan-crying-sad-tears-gif-5228894')
+	}
+}

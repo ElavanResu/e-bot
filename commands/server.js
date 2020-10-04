@@ -5,7 +5,7 @@
  * Created Date: Thursday, May 21st 2020, 8:20:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,6 +16,6 @@ module.exports = {
 	description: 'Gives server info',
 	guildOnly: true,
 	execute(message, args) {
-		message.channel.send(`This server is: ${message.guild.name}`);
-	},
-};
+		message.channel.send(`This server is: ${message.guild.name}`)
+	}
+}

@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 03 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -24,37 +24,8 @@
  */
 
 const { getEmojiCode } = require('../dbObjects')
-
-const whiteList = [
-	{
-		name: 'ElavanResu',
-		id: '234249678328299520',
-	},
-	{
-		name: 'Pushieee',
-		id: '686973497250938929'
-	},
-	{
-		name: 'Dhruv',
-		id: '460488764511223848'
-	},
-	// {
-	// 	name: 'NiteBraek',
-	// 	id: '403454311906148383',
-	// },
-	// {
-	// 	name: 'AncientBeing',
-	// 	id: '312541974844669952',
-	// },
-	{
-		name: 'Jaegar',
-		id: '427000717681885185',
-	}
-	// {
-	// 	name: 'Molten',
-	// 	id: '285661264099803137',
-	// },
-];
+const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
+const Discord = require('discord.js')
 
 module.exports = {
 	name: 'em',
@@ -66,44 +37,41 @@ module.exports = {
 	moreInfo: `Emoji list:`,
 	cooldown: -1,
 	async execute(message, args) {
-		let allow = false;
-		for(let count = 0; count < whiteList.length; count++) {
-			if (message.author.id === whiteList[count].id) {
-				allow = true;
-				break;
-			}
+		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'custom_emojis')) {
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#A6011F')
+					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+			)
 		}
-		if (!allow) {
-			return message.channel.send('You are not allowed to use custom emojis.');
-		}
-		message.delete();
-		if (!message.channel) return console.log('channel not specified');
-    if (!args[0]) return message.channel.send('Emoji not specified');
+		message.delete()
+		if (!message.channel) return console.log('channel not specified')
+    if (!args[0]) return message.channel.send('Emoji not specified')
 
-		// if (!args[0].startsWith('<@')) return console.log('Mention user');
-		// if (!args[1]) return console.log('Message not specified');
-		// const msg = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ');
-		// const mentionedUser = message.mentions.users.first();
+		// if (!args[0].startsWith('<@')) return console.log('Mention user')
+		// if (!args[1]) return console.log('Message not specified')
+		// const msg = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
+		// const mentionedUser = message.mentions.users.first()
 		try {
 			const emojiCode = await getEmojiCode(args[0])
 			message.channel.fetchWebhooks()
 			.then(webhook => {
-				let foundHook;
+				let foundHook
 				webhook.forEach(ele => {
-					if (ele.name === 'SimonHook') foundHook = ele;
-				});
+					if (ele.name === 'SimonHook') foundHook = ele
+				})
 				if (!foundHook) {
 					message.channel.createWebhook('SimonHook')
 						.then(newWebhook => {
 							newWebhook.send(emojiCode, {
 								'username': message.author.username,
 								'avatarURL': `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`
-							});
+							})
 						})
 						.catch (error => {
-							console.log('error: ', error);
-							return message.channel.send('Error, check console');
-						});
+							console.log('error: ', error)
+							return message.channel.send('Error, check console')
+						})
 				}
 				else {
 					foundHook.send(emojiCode, {
@@ -116,13 +84,13 @@ module.exports = {
 
 					})
 						.catch(error => {
-							console.log('error: ', error);
-							return console.log('Incorrect emoji or internal error');
-						});
+							console.log('error: ', error)
+							return console.log('Incorrect emoji or internal error')
+						})
 				}
-			});
+			})
 		} catch {
 			console.log('error in fetching emoji code: ', error)
 		}
-	},
-};
+	}
+}
