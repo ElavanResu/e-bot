@@ -12,7 +12,8 @@
  * ------------------------------------
  * All Rights reserved
  */
-const musicWhitelist = require('../metaData/musicWhiteList');
+const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
+const Discord = require('discord.js')
 
 module.exports = {
 	name: 'r',
@@ -22,26 +23,23 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['resume'],
 	async execute(message, args, musicQueue, queue) {
-		// let allow = false;
-		// for(let count = 0; count < musicWhitelist.length; count++) {
-		// 	if (message.author.id === musicWhitelist[count].id) {
-		// 		allow = true;
-		// 		break;
-		// 	}
-		// }
-		// if (!allow) {
-		// 	return message.channel.send('You are not allowed to use my music feature.');
-		// }
-		try {
-			const voiceChannel = message.member.voice.channel;
-			if (!voiceChannel) {
-				return message.channel.send('You are not on a voice channel');
-			}
-			if (!musicQueue) return message.channel.send('There is no song that I could skip!');
-			await message.react('⏯️');
-			musicQueue.connection.dispatcher.resume();
-		} catch (error) {
-			console.log(`Error in resuming the song: ${error}`);
+		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_resume')) {
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#A6011F')
+					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+			)
 		}
-	},
-};
+		try {
+			const voiceChannel = message.member.voice.channel
+			if (!voiceChannel) {
+				return message.channel.send('You are not on a voice channel')
+			}
+			if (!musicQueue) return message.channel.send('There is no song that I could skip!')
+			await message.react('⏯️')
+			musicQueue.connection.dispatcher.resume()
+		} catch (error) {
+			console.log(`Error in resuming the song: ${error}`)
+		}
+	}
+}

@@ -4,13 +4,15 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 03 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
 const Sequelize = require('sequelize')
+const customEmojiModel = require('./models/CustomEmojis')
+const permissionsModel = require('./models/Permissions.js')
 const { config } = require('dotenv')
 if (process.env.NODE_ENV !== 'production') {
 	config({
@@ -25,14 +27,43 @@ const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_US
 	storage: 'database.sqlite',
 })
 
-const CustomEmoji = require('./models/CustomEmojis')(sequelize, Sequelize.DataTypes)
-
 const force = process.argv.includes('--force') || process.argv.includes('-f')
+
+const CustomEmojis = customEmojiModel.customEmojisSchema(sequelize, Sequelize.DataTypes)
 
 sequelize.sync({ force }).then(async () => {
   try {
-    await CustomEmoji.upsert({ emoji_name: 'NopeNope'.toLowerCase(), emoji_global_code: '<a:NopeNope:750875276040470539>', copies: 0 })
-    console.log('Database synced')
+    await CustomEmojis.upsert({ emoji_name: 'NopeNope'.toLowerCase(), emoji_global_code: '<a:NopeNope:750875276040470539>', copies: 0 })
+    console.log('Database synced with custom emojis table')
+    sequelize.close()
+  } catch (error) {
+    console.log('error: ', error)
+  }
+}).catch(console.error)
+
+const Permissions = permissionsModel.permissionsSchema(sequelize, Sequelize.DataTypes)
+
+sequelize.sync({ force }).then(async () => {
+  try {
+    await Permissions.upsert({
+      member_id: '234249678328299520',
+      guild_id: '666931933929930752',
+      music_back: true,
+      music_queue_clear: true,
+      music_disconnet: true,
+      music_next: true,
+      music_play: true,
+      music_pause: true,
+      music_resume: true,
+      music_que_remove_item: true,
+      annoy: true,
+      hook: true,
+      custom_emojis: true,
+      custom_emojis_settings: true,
+      prune: true,
+      reload_cmd: true
+    })
+    console.log('Database synced with Permissions table')
     sequelize.close()
   } catch (error) {
     console.log('error: ', error)

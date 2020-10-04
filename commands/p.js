@@ -12,38 +12,38 @@
  * ------------------------------------
  * All Rights reserved
  */
-const ytdl = require('ytdl-core');
-const Discord = require('discord.js');
-const musicWhitelist = require('../metaData/musicWhiteList');
-const spotifyHandelr = require('../commandHandlers/p/spotifyHandler');
-const youtubeHandler = require('../commandHandlers/p/youtubeHandler');
-const searchHandler = require('../commandHandlers/p/searchHandler');
+const ytdl = require('ytdl-core')
+const Discord = require('discord.js')
+const spotifyHandelr = require('../commandHandlers/p/spotifyHandler')
+const youtubeHandler = require('../commandHandlers/p/youtubeHandler')
+const searchHandler = require('../commandHandlers/p/searchHandler')
+const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 
 const play = (message, queue, guild, song) => {
-	const musicQueue = queue.get(guild.id);
+	const musicQueue = queue.get(guild.id)
 
 	if (!song) {
-		musicQueue.voiceChannel.leave();
-		queue.delete(guild.id);
-		return;
+		musicQueue.voiceChannel.leave()
+		queue.delete(guild.id)
+		return
 	}
 
 	const nowPlayingEmbed = new Discord.MessageEmbed()
 		.setColor('#3EFEFF')
 		.setTitle('**Now Playing**')
-		.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`);
-	message.channel.send(nowPlayingEmbed);
+		.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`)
+	message.channel.send(nowPlayingEmbed)
 
-	const dispatcher = musicQueue.connection.play(ytdl(song.url));
+	const dispatcher = musicQueue.connection.play(ytdl(song.url))
 
 	dispatcher.on('finish', () => {
-		console.log('Music ended!');
-		musicQueue.songPosition++;
-		play(message, queue, guild, musicQueue.songs[musicQueue.songPosition]);
-	});
+		console.log('Music ended!')
+		musicQueue.songPosition++
+		play(message, queue, guild, musicQueue.songs[musicQueue.songPosition])
+	})
 
-	dispatcher.setVolumeLogarithmic(musicQueue.volume / 5);
-};
+	dispatcher.setVolumeLogarithmic(musicQueue.volume / 5)
+}
 
 module.exports = {
 	name: 'p',
@@ -53,18 +53,15 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['play'],
 	async execute(message, args, musicQueue, queue) {
-		// let allow = false;
-		// for(let count = 0; count < musicWhitelist.length; count++) {
-		// 	if (message.author.id === musicWhitelist[count].id) {
-		// 		allow = true;
-		// 		break;
-		// 	}
-		// }
-		// if (!allow) {
-		// 	return message.channel.send('You are not allowed to use the music feature.');
-		// }
+		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_play')) {
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#A6011F')
+					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+			)
+		}
 		try {
-			const voiceChannel = message.member.voice.channel;
+			const voiceChannel = message.member.voice.channel
 			if (!voiceChannel) {
 				return message.channel.send(
 					new Discord.MessageEmbed()
@@ -72,14 +69,14 @@ module.exports = {
 						.setDescription(`You need to join a voice channel.`)
 				)
 			}
-			const permissions = voiceChannel.permissionsFor(message.client.user);
+			const permissions = voiceChannel.permissionsFor(message.client.user)
 			if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-				return message.channel.send('I need the permissions to join and speak in your voice channel!');
+				return message.channel.send('I need the permissions to join and speak in your voice channel!')
 			}
 
 
-			const searchString = args.toString().replace(/[, ]+/g, ' ');
-			let newSongsQueue = [];
+			const searchString = args.toString().replace(/[, ]+/g, ' ')
+			let newSongsQueue = []
 			if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
 				newSongsQueue = await youtubeHandler(message, searchString)
 			} else if (searchString.includes('https://open.spotify.com')) {
@@ -103,7 +100,7 @@ module.exports = {
 				}
 			}
 
-			let queueContruct;
+			let queueContruct
 			if (!musicQueue) {
 				queueContruct = {
 					textChannel: message.channel,
@@ -151,12 +148,12 @@ module.exports = {
 				}
 			}
 		} catch (error) {
-			console.log('Error in play method: ', error);
+			console.log('Error in play method: ', error)
 			return message.channel.send(
 				new Discord.MessageEmbed()
 					.setColor('#3EFEFF')
 					.setDescription(`Couldn't process the song`)
 			)
 		}
-	},
-};
+	}
+}

@@ -4,7 +4,7 @@
  * Created Date: Thursday, May 21st 2020, 9:06:03 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Jun 25 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -19,8 +19,8 @@ module.exports = {
 	guildOnly: true,
 	execute(message, args) {
 		if (args[0] === 'foo') {
-			return message.channel.send('bar');
+			return message.channel.send('bar')
 		}
-		message.channel.send(`Arguments: ${args}\nArguments length: ${args.length}`);
-	},
-};
+		message.channel.send(`Arguments: ${args}\nArguments length: ${args.length}`)
+	}
+}

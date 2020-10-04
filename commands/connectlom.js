@@ -12,17 +12,17 @@
  * All Rights reserved
  */
 
-const Discord = require('discord.js');
+const Discord = require('discord.js')
 
 module.exports = {
 	name: 'connectlom',
 	description: 'Connects to ElavanResu\'s server',
 	guildOnly: true,
 	execute(message, args) {
-		if (message.author.id !== '234249678328299520') return message.channel.send('You\'re not allowed to use this command.');
+		if (message.author.id !== '234249678328299520') return message.channel.send('You\'re not allowed to use this command.')
 
-		console.log('connected tolom');
-		const hook = new Discord.WebhookClient(`${process.env.HOOKID}`, `${process.env.HOOKTOKEN}`);
+		console.log('connected tolom')
+		const hook = new Discord.WebhookClient(`${process.env.HOOKID}`, `${process.env.HOOKTOKEN}`)
 
 		hook.send({
 			username: 'logs',
@@ -72,6 +72,6 @@ module.exports = {
 					},
 				},
 			],
-		});
-	},
-};
+		})
+	}
+}

@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Oct 01 2020
+ * Last Modified: Sun Oct 04 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -91,38 +91,38 @@ const userTable = {
 		showOnMention: true,
 		everytime: false,
 	},
-};
+}
 
 const initiateReactionAlgo = async (message) => {
-	const allUsers = Object.keys(userTable);
+	const allUsers = Object.keys(userTable)
 	for (let userCount = 0; userCount < allUsers.length; userCount++) {
-		const userObject = userTable[allUsers[userCount]];
-		const checkEverytime = userObject.everytime && message.author.id === userObject.id;
+		const userObject = userTable[allUsers[userCount]]
+		const checkEverytime = userObject.everytime && message.author.id === userObject.id
 
-		const mentionedUser = message.mentions.users.get(userObject.id);
-		const matchedWords = message.content.toLowerCase().match(userObject.checkWords || null);
+		const mentionedUser = message.mentions.users.get(userObject.id)
+		const matchedWords = message.content.toLowerCase().match(userObject.checkWords || null)
 
-		const confirmReact = (userObject.showOnMention && mentionedUser !== undefined) || (userObject.checkWords !== undefined && matchedWords !== null);
+		const confirmReact = (userObject.showOnMention && mentionedUser !== undefined) || (userObject.checkWords !== undefined && matchedWords !== null)
 
-		const checkBot = !(userObject.evadeBot && message.author.id === '712367845572345977');
+		const checkBot = !(userObject.evadeBot && message.author.id === '712367845572345977')
 
-		const checlElavanMention = message.mentions.users.get('234249678328299520');
-		const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g);
-		const checkElavan = !(userObject.bellowElavan && (checlElavanMention !== undefined || matchedElavanWords !== null));
+		const checlElavanMention = message.mentions.users.get('234249678328299520')
+		const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g)
+		const checkElavan = !(userObject.bellowElavan && (checlElavanMention !== undefined || matchedElavanWords !== null))
 
 		if ((checkElavan && (checkEverytime || confirmReact)) && checkBot) {
 			try {
 				for (let counter = 0; counter < userObject.reactions.length; counter++) {
-					await message.react(userObject.reactions[counter]);
+					message.react(userObject.reactions[counter])
 				}
 			}
 			catch (error) {
-				console.error('One of the emojis failed to react');
+				console.error('One of the emojis failed to react')
 			}
 		}
 	}
-};
+}
 
 module.exports = {
 	initiateReactionAlgo,
-};
+}

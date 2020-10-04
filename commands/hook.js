@@ -10,70 +10,37 @@
  * ------------------------------------
  * All Rights reserved
  */
-
-const whiteList = [
-	{
-		name: 'ElavanResu',
-		id: '234249678328299520',
-	},
-	// {
-	// 	name: 'NiteBraek',
-	// 	id: '403454311906148383',
-	// },
-	{
-		name: 'AncientBeing',
-		id: '312541974844669952',
-	},
-	{
-		name: 'Zaran',
-		id: '698270204496576633'
-	},
-	// {
-	// 	name: 'Jaegar',
-	// 	id: '427000717681885185',
-	// },
-	// {
-	// 	name: 'Molten',
-	// 	id: '285661264099803137',
-	// },
-	// {
-	// 	name: 'Pushieee',
-	// 	id: '686973497250938929'
-	// }
-];
+const Discord = require('discord.js')
+const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 
 module.exports = {
 	name: 'hook',
 	description: 'Hooks',
 	args: true,
 	guildOnly: true,
-	execute(message, args) {
-		console.log('guild: ', message.guild);
-		let allow = false;
-		for(let count = 0; count < whiteList.length; count++) {
-			if (message.author.id === whiteList[count].id) {
-				allow = true;
-				break;
-			}
+	async execute(message, args) {
+		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'hook')) {
+			return message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#A6011F')
+					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+			)
 		}
-		if (!allow) {
-			return message.channel.send('You are not allowed to use hook.');
-		}
-		message.delete();
-		if (!message.channel) return console.log('channel not specified');
-		if (!args[0]) return console.log('Title not specified');
-		if (!args[0].startsWith('<@')) return console.log('Mention user');
-		if (!args[1]) return console.log('Message not specified');
-		const msg = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ');
-		const mentionedUser = message.mentions.users.first();
+		message.delete()
+		if (!message.channel) return console.log('channel not specified')
+		if (!args[0]) return console.log('Title not specified')
+		if (!args[0].startsWith('<@')) return console.log('Mention user')
+		if (!args[1]) return console.log('Message not specified')
+		const msg = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
+		const mentionedUser = message.mentions.users.first()
 		message.channel.fetchWebhooks()
 			.then(webhook => {
-				console.log('Webhook: ', webhook);
-				let foundHook;
+				console.log('Webhook: ', webhook)
+				let foundHook
 				webhook.forEach(ele => {
-					if (ele.name === 'SimonHook') foundHook = ele;
-				});
-				console.log('Then1: ', foundHook);
+					if (ele.name === 'SimonHook') foundHook = ele
+				})
+				console.log('Then1: ', foundHook)
 				if (!foundHook) {
 					message.channel.createWebhook('SimonHook')
 						.then(newWebhook => {
@@ -84,15 +51,15 @@ module.exports = {
 							// 	'color': parseInt(`0x${color}`),
 							// 	'description': message,
 							// }]
-							});
+							})
 						})
 						.catch (error => {
-							console.log('error: ', error);
-							return message.channel.send('Error, check console');
-						});
+							console.log('error: ', error)
+							return message.channel.send('Error, check console')
+						})
 				}
 				else {
-					console.log('avatarUrl: ', mentionedUser.avatarURL);
+					console.log('avatarUrl: ', mentionedUser.avatarURL)
 					foundHook.send(`${msg}`, {
 						'username': mentionedUser.username,
 						'avatarURL': `${mentionedUser.displayAvatarURL({ format: 'png', dynamic: true })}`,
@@ -103,10 +70,10 @@ module.exports = {
 
 					})
 						.catch(error => {
-							console.log('error: ', error);
-							return message.channel.send('error, check console');
-						});
+							console.log('error: ', error)
+							return message.channel.send('error, check console')
+						})
 				}
-			});
-	},
-};
+			})
+	}
+}
