@@ -49,9 +49,10 @@ module.exports = {
 	name: 'p',
 	description: 'Plays music from youtube',
 	args: true,
-	usage: '<youtube video link> or <song name>',
+	usage: '<spotify playlist>|<song name>|<youtube link>',
 	guildOnly: true,
 	aliases: ['play'],
+	cooldown: 1,
 	async execute(message, args, musicQueue, queue) {
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_play')) {
 			return message.channel.send(
@@ -65,7 +66,7 @@ module.exports = {
 			if (!voiceChannel) {
 				return message.channel.send(
 					new Discord.MessageEmbed()
-						.setColor('#3EFEFF')
+						.setColor('#A6011F')
 						.setDescription(`You need to join a voice channel.`)
 				)
 			}
@@ -85,7 +86,7 @@ module.exports = {
 				if (newSongsQueue.length === 0) {
 					return message.channel.send(
 						new Discord.MessageEmbed()
-							.setColor('#3EFEFF')
+							.setColor('#A6011F')
 							.setDescription(`Error in loading the playlist`)
 					)
 				}
@@ -94,7 +95,7 @@ module.exports = {
 				if (newSongsQueue.length === 0) {
 					return message.channel.send(
 						new Discord.MessageEmbed()
-							.setColor('#3EFEFF')
+							.setColor('#A6011F')
 							.setDescription(`No results found for **${searchString}**`)
 					)
 				}
@@ -151,7 +152,7 @@ module.exports = {
 			console.log('Error in play method: ', error)
 			return message.channel.send(
 				new Discord.MessageEmbed()
-					.setColor('#3EFEFF')
+					.setColor('#A6011F')
 					.setDescription(`Couldn't process the song`)
 			)
 		}

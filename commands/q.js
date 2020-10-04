@@ -50,7 +50,7 @@ module.exports = {
 		if (!voiceChannel) {
 			return message.channel.send(
 				new Discord.MessageEmbed()
-					.setColor('#3EFEFF')
+					.setColor('#A6011F')
 					.setDescription('You are not on a voice channel')
 			)
 		}
@@ -58,7 +58,7 @@ module.exports = {
 		try {
 			if (!musicQueue) {
 				const emptyQueueEmbed = new Discord.MessageEmbed()
-					.setColor('#3EFEFF')
+					.setColor('#A6011F')
 					.setDescription('There is nothing in the queue! ☹️')
 				return message.channel.send(emptyQueueEmbed)
 			}

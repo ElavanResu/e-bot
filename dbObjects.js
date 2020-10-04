@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Mon Oct 05 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -14,6 +14,7 @@ const Sequelize = require('sequelize')
 const { config } = require('dotenv')
 const customEmojiModel = require('./models/CustomEmojis')
 const permissionsModel = require('./models/Permissions.js')
+const customEmojiNames = require('./models/CustomEmojiNames')
 if (process.env.NODE_ENV !== 'production') {
 	config({
 		path: __dirname + '/.env'
@@ -61,6 +62,25 @@ const getMemberPerms = async (memberId, guildId) => {
   return await permissionsModel.getMemberPerms(Permissions, memberId, guildId)
 }
 
+// Custom Emoji Names helpers
+const CustomEmojiNames = customEmojiNames.customEmojiNamesSchema(sequelize, Sequelize.DataTypes)
+
+const addCustomEmojiName = async (memberId, customName, emojiName) => {
+  return await customEmojiNames.addCustomEmojiName(CustomEmojiNames, CustomEmojis, memberId, customName, emojiName)
+}
+
+const getCustomEmojiNameDetails = async (memberId, customName) => {
+  return await customEmojiNames.getCustomEmojiNameDetails(CustomEmojiNames, memberId, customName)
+}
+
+const delCustomEmojiName = async (memberId, customName) => {
+  return await customEmojiNames.delCustomEmojiName(CustomEmojiNames, memberId, customName)
+}
+
+const getCustomEmojiNamesList = async (memberId) => {
+  return await customEmojiNames.getCustomEmojiNamesList(CustomEmojiNames, memberId)
+}
+
 module.exports = {
   addCustomEmoji,
   getEmojiCode,
@@ -68,5 +88,9 @@ module.exports = {
   addPermission,
   updatePermission,
   deletePermission,
-  getMemberPerms
+  getMemberPerms,
+  addCustomEmojiName,
+  getCustomEmojiNameDetails,
+  delCustomEmojiName,
+  getCustomEmojiNamesList
 }

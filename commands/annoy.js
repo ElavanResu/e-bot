@@ -5,7 +5,7 @@
  * Created Date: Saturday, May 23rd 2020, 11:12:38 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Mon Oct 05 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -30,6 +30,7 @@ module.exports = {
 					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
 			)
 		}
+		message.delete()
 		if (!message.mentions.users.size) return message.channel.send(
 			new Discord.MessageEmbed()
 				.setColor('#A6011F')
@@ -55,6 +56,17 @@ module.exports = {
 					setTimeout(() => user.send(`**${message.author.username} sent me to annoy you with a message:**\n\`${msg}\``), 1500)
 				}
 			})
+
+			const messageToDelete = await message.channel.send(
+				new Discord.MessageEmbed()
+					.setColor('#3EFEFF')
+					.setDescription(`Message sent, this message will get deleted in 6 seconds.`)
+			)
+
+			setTimeout(() => {
+				messageToDelete.delete()
+			}, 6000)
+			return
 		}
 	}
 }

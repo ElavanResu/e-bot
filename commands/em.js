@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Mon Oct 05 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -23,7 +23,7 @@
  * All Rights reserved
  */
 
-const { getEmojiCode } = require('../dbObjects')
+const getEmojiCodeHandler = require('../commandHandlers/em/getEmojiCodeHandler')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 const Discord = require('discord.js')
 
@@ -53,7 +53,19 @@ module.exports = {
 		// const msg = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
 		// const mentionedUser = message.mentions.users.first()
 		try {
-			const emojiCode = await getEmojiCode(args[0])
+			const emojiCode = await getEmojiCodeHandler(message, args[0])
+			if (!emojiCode) {
+				console.log('jdwjdwjdw-----------------------------')
+				const messageToDelete = await message.channel.send(
+					new Discord.MessageEmbed()
+						.setColor('#A6011F')
+						.setDescription(`**${args[0]}** is not an invalid emoji name. This message will get deleted in 6 seconds.`)
+				)
+				setTimeout(() => {
+					messageToDelete.delete()
+				}, 6000)
+				return
+			}
 			message.channel.fetchWebhooks()
 			.then(webhook => {
 				let foundHook
