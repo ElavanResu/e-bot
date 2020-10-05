@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Tue Oct 06 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -28,11 +28,12 @@ const play = (message, queue, guild, song) => {
 		return
 	}
 
-	const nowPlayingEmbed = new Discord.MessageEmbed()
-		.setColor('#3EFEFF')
-		.setTitle('**Now Playing**')
-		.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`)
-	message.channel.send(nowPlayingEmbed)
+	message.channel.send(
+		new Discord.MessageEmbed()
+			.setColor('#3EFEFF')
+			.setTitle('**Now Playing**')
+			.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`)
+	)
 
 	const dispatcher = musicQueue.connection.play(ytdl(song.url))
 
@@ -40,6 +41,14 @@ const play = (message, queue, guild, song) => {
 		console.log('Music ended!')
 		musicQueue.songPosition++
 		play(message, queue, guild, musicQueue.songs[musicQueue.songPosition])
+	})
+
+	dispatcher.on('error', (error) => {
+		const hook = new Discord.WebhookClient(`${process.env.HOOKID}`, `${process.env.HOOKTOKEN}`)
+		hook.send(`There is an error in dispatcher: ${error}\n\n ${JSON.stringify(error)}`,{
+			username: `Music Bot`,
+			avatarURL: `https://i.imgur.com/5Dctm5N.jpg`
+    })
 	})
 
 	dispatcher.setVolumeLogarithmic(musicQueue.volume / 5)

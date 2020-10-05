@@ -10,18 +10,6 @@
  * ------------------------------------
  * All Rights reserved
  */
-/**
- * File: /Users/shubham/ElavanResu/asach-bot/commands/hook.js
- * Project: /Users/shubham/ElavanResu/asach-bot
- * Created Date: Monday, May 25th 2020, 6:02:46 pm
- * Author: Shubham Navale
- * -----
- * Last Modified: Thu Jun 25 2020
- * Modified By: Shubham Navale
- * -----
- * ------------------------------------
- * All Rights reserved
- */
 
 const getEmojiCodeHandler = require('../commandHandlers/em/getEmojiCodeHandler')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
