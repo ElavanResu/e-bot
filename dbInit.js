@@ -4,15 +4,16 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Tue Oct 06 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
 const Sequelize = require('sequelize')
-const customEmojiModel = require('./models/CustomEmojis')
+const customEmojisModel = require('./models/CustomEmojis')
 const permissionsModel = require('./models/Permissions.js')
+const customEmojiNames = require('./models/CustomEmojiNames')
 const { config } = require('dotenv')
 if (process.env.NODE_ENV !== 'production') {
 	config({
@@ -29,7 +30,7 @@ const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_US
 
 const force = process.argv.includes('--force') || process.argv.includes('-f')
 
-const CustomEmojis = customEmojiModel.customEmojisSchema(sequelize, Sequelize.DataTypes)
+const CustomEmojis = customEmojisModel.customEmojisSchema(sequelize, Sequelize.DataTypes)
 
 sequelize.sync({ force }).then(async () => {
   try {
@@ -55,6 +56,7 @@ sequelize.sync({ force }).then(async () => {
       music_play: true,
       music_pause: true,
       music_resume: true,
+      music_jump: true,
       music_que_remove_item: true,
       annoy: true,
       hook: true,
@@ -64,6 +66,18 @@ sequelize.sync({ force }).then(async () => {
       reload_cmd: true
     })
     console.log('Database synced with Permissions table')
+    sequelize.close()
+  } catch (error) {
+    console.log('error: ', error)
+  }
+}).catch(console.error)
+
+const CustomEmojiNames = customEmojiNames.customEmojiNamesSchema(sequelize, Sequelize.DataTypes)
+
+sequelize.sync({ force }).then(async () => {
+  try {
+    await CustomEmojiNames.upsert({ custom_name: 'thicass', emoji_name: 'ecl_thiccass', member_id: '234249678328299520' })
+    console.log('Database synced with custom emoji names table')
     sequelize.close()
   } catch (error) {
     console.log('error: ', error)
