@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 05 2020
+ * Last Modified: Tue Oct 06 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -56,6 +56,7 @@ sequelize.sync({ force }).then(async () => {
       music_play: true,
       music_pause: true,
       music_resume: true,
+      music_jump: true,
       music_que_remove_item: true,
       annoy: true,
       hook: true,

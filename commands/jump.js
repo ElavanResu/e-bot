@@ -24,7 +24,7 @@ module.exports = {
   cooldown: -1,
   async execute(message, args, musicQueue, queue) {
     // Check perms
-    if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'custom_emojis_settings')) {
+    if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_jump')) {
 			return message.channel.send(
 				new Discord.MessageEmbed()
 					.setColor('#A6011F')

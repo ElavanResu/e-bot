@@ -4,7 +4,7 @@
  * Created Date: Sunday, October 4th 2020, 1:36:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Tue Oct 06 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -19,6 +19,7 @@ const defaultPemrs = {
   music_play: true,
   music_pause: true,
   music_resume: true,
+  music_jump: true,
   music_que_remove_item: true,
   annoy: false,
   hook: false,
@@ -62,6 +63,10 @@ const permissionsSchema = (sequelize, DataTypes) => {
       allowNull: false
     },
     music_resume: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    music_jump: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
@@ -163,6 +168,7 @@ const getMemberPerms = async (SequelizeConnetion, memberId, guildId) => {
         'music_play',
         'music_pause',
         'music_resume',
+        'music_jump',
         'music_que_remove_item',
         'annoy',
         'hook',
