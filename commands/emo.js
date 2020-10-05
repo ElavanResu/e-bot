@@ -4,13 +4,13 @@
  * Created Date: Saturday, October 3rd 2020, 4:33:24 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 05 2020
+ * Last Modified: Tue Oct 06 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-
+const globalUsers = require('../metaData/globalUsers')
 const Discord = require('discord.js')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 const listHandler = require('../commandHandlers/emo/listHandler')
@@ -18,6 +18,7 @@ const { prefix } = require('../config.json')
 const setCustomNameHandler = require('../commandHandlers/emo/setCustomNameHandler')
 const delCustomNameHandler = require('../commandHandlers/emo/delCustomNameHandler')
 const customListHandler = require('../commandHandlers//emo/customListHandler')
+const addEmojiCodeManuallyHelper = require('../commandHandlers/emo/addEmojiCodeManuallyHelper')
 
 module.exports = {
   name: 'emo',
@@ -46,17 +47,36 @@ module.exports = {
       await listHandler(message)
     } else if (args[0] === 'customlist' || args[0] === 'custlist') {
       await customListHandler(message)
+    } else if (args[0] === 'manset') {
+      if (!globalUsers.hasOwnProperty(message.author.id)) return message.channel.send(
+        new Discord.MessageEmbed()
+          .setColor('#A6011F')
+          .setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+      )
+
+      if (!args[1]) return message.channel.send(
+        new Discord.MessageEmbed()
+          .setColor('#A6011F')
+          .setDescription('Emoji name not specified')
+      )
+      if (!args[2]) return message.channel.send(
+        new Discord.MessageEmbed()
+          .setColor('#A6011F')
+          .setDescription('Emoji code not specified')
+      )
+
+      await addEmojiCodeManuallyHelper(message, args[1], args[2], args[3])
     } else if (args[0] === 'set') {
       try {
         if (!args[1]) return message.channel.send(
           new Discord.MessageEmbed()
             .setColor('#A6011F')
-            .setDescription('Emoji name not specified')
+            .setDescription('Custom name not specified')
         )
         if (!args[2]) return message.channel.send(
           new Discord.MessageEmbed()
             .setColor('#A6011F')
-            .setDescription('Custom name not specified')
+            .setDescription('Emoji name not specified')
         )
         await setCustomNameHandler(message, message.author.id, args[1], args[2])
       } catch (error) {
