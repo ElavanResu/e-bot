@@ -1,10 +1,10 @@
 /**
- * File: /home/elavanresu/ElavanResu/e-bot/commandHandlers/settings/permsHandler.js
+ * File: /home/elavanresu/ElavanResu/e-bot/commandHandlers/perms/setPermsHandler.js
  * Project: /home/elavanresu/ElavanResu/e-bot
  * Created Date: Sunday, October 4th 2020, 4:55:21 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Sun Oct 11 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -13,7 +13,7 @@
 const { updatePermission } = require('../../dbObjects')
 const Discord = require('discord.js')
 
-const permsHandler = async (message, user, permType, permValue) => {
+const setPermsHandler = async (message, user, permType, permValue) => {
   try {
     const response = await updatePermission(user.id, message.guild.id, permType, permValue)
     if (response.status !== 'success') return message.channel.send(
@@ -31,4 +31,4 @@ const permsHandler = async (message, user, permType, permValue) => {
   }
 }
 
-module.exports = permsHandler
+module.exports = setPermsHandler
