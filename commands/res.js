@@ -12,6 +12,7 @@
  */
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 const restrictUsersHandler = require('../commandHandlers/res/restrictUsersHandler')
+const sendRestrictedUsersList = require('../commandHandlers/res/sendRestrictedUsersList')
 const Discord = require('discord.js')
 
 module.exports = {
@@ -40,6 +41,11 @@ module.exports = {
       }, 6000)
 
       return
+    }
+
+    // Get the list of restricted users
+    if (args[0] === 'list') {
+      return await sendRestrictedUsersList(message)
     }
 
     // Check mentions

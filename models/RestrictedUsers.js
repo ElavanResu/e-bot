@@ -37,6 +37,18 @@ const findMember = async (SequelizeConnetion, memberId, guildId) => {
   }
 }
 
+const getAllMembers = async (SequelizeConnetion, guildId) => {
+  try {
+    const restrictedUsersListObject = await SequelizeConnetion.findAll({
+      where: { guild_id: guildId }
+    })
+
+    return restrictedUsersListObject
+  } catch (error) {
+    console.log('Error in getAllMembers: ', error)
+  }
+}
+
 const addMember = async (SequelizeConnetion, memberId, guildId) => {
   try {
     const restrictedUserObject = await SequelizeConnetion.findOne({
@@ -85,6 +97,7 @@ const removeMember = async (SequelizeConnetion, memberId, guildId) => {
 module.exports = {
   restrictedUsersSchema,
   findMember,
+  getAllMembers,
   addMember,
   removeMember
 }

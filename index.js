@@ -68,7 +68,7 @@ client.on('message', async message => {
 	}
 
 	// Restrict user
-	if (await checkUserRestrictions(message)) {
+	if (message.channel.type === 'text' && await checkUserRestrictions(message)) {
 		return null
 	}
 

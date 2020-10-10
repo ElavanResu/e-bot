@@ -89,6 +89,10 @@ const findMember = async (memberId, guildId) => {
   return await restrictedUsers.findMember(RestrictedUsers, memberId, guildId)
 }
 
+const getAllMembers = async (guildId) => {
+  return await restrictedUsers.getAllMembers(RestrictedUsers, guildId)
+}
+
 const addMember = async (memberId, guildId) => {
   return await restrictedUsers.addMember(RestrictedUsers, memberId, guildId)
 }
@@ -110,6 +114,7 @@ module.exports = {
   delCustomEmojiName,
   getCustomEmojiNamesList,
   findMember,
+  getAllMembers,
   addMember,
   removeMember
 }
