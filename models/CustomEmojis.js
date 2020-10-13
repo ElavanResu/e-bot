@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 12:39:52 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -33,9 +33,7 @@ const customEmojisSchema = (sequelize, DataTypes) => {
 
 const getEmojiList = async (SequelizeConnetion) => {
   try {
-    const emojiList = await SequelizeConnetion.findAll({
-      attributes: ['emoji_name']
-    })
+    const emojiList = await SequelizeConnetion.findAll()
     return emojiList
   } catch (error) {
     console.log('Error in getEmojiList: ', error)

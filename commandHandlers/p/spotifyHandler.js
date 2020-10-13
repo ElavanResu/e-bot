@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 10:10:06 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,7 +16,7 @@ const {
   getArtistRecord,
   getAlbumRecord,
 	getTrackRecord
- } = require('../../services/spotifyServices')
+ } = require('../../services/spotify')
  const yts = require('yt-search')
 
 const spotifyHandler = async (message, searchString) => {

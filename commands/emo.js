@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 4:33:24 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 06 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -19,6 +19,7 @@ const setCustomNameHandler = require('../commandHandlers/emo/setCustomNameHandle
 const delCustomNameHandler = require('../commandHandlers/emo/delCustomNameHandler')
 const customListHandler = require('../commandHandlers//emo/customListHandler')
 const addEmojiCodeManuallyHelper = require('../commandHandlers/emo/addEmojiCodeManuallyHelper')
+const checkAllHandler = require('../commandHandlers/emo/checkAllHandler')
 
 module.exports = {
   name: 'emo',
@@ -45,6 +46,8 @@ module.exports = {
 
     if (args[0] === 'list') {
       await listHandler(message)
+    } else if (args[0] === 'checkall') {
+      await checkAllHandler(message)
     } else if (args[0] === 'customlist' || args[0] === 'custlist') {
       await customListHandler(message)
     } else if (args[0] === 'manset') {

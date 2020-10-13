@@ -10,7 +10,7 @@ const badWordExterminator = require('./features/badWordExterminator')
 const checkUserRestrictions = require('./features/checkUserRestrictions')
 const logChats = require('./features/logChats')
 const captureCustomEmojis = require('./features/captureCustomEmojis')
-const { initialiseSpotifyServices } = require('./services/spotifyServices')
+const { initialiseSpotifyServices } = require('./services/spotify')
 // Creating client instance
 const client = new Discord.Client()
 
@@ -95,7 +95,8 @@ client.on('message', async message => {
 	}
 
 	// Get the prefix and commands
-	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || message.author.bot) return
+	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || (message.author.bot && (message.author.id !== '717421303614668841' && message.author.id !== '712367845572345977'))) return
+
 
 	const args = message.content.slice(prefix.length).split(/ +/)
 	const commandName = args.shift().toLowerCase()
