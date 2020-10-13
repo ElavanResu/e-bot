@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 05 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -25,6 +25,7 @@ module.exports = {
 	moreInfo: `Emoji list:`,
 	cooldown: -1,
 	async execute(message, args) {
+		console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'custom_emojis')) {
 			return message.channel.send(
 				new Discord.MessageEmbed()
@@ -32,9 +33,12 @@ module.exports = {
 					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
 			)
 		}
-		message.delete()
 		if (!message.channel) return console.log('channel not specified')
-    if (!args[0]) return message.channel.send('Emoji not specified')
+		if (!args[0]) return message.channel.send('Emoji not specified')
+
+		if (args[1] !== 's') {
+			message.delete()
+		}
 
 		// if (!args[0].startsWith('<@')) return console.log('Mention user')
 		// if (!args[1]) return console.log('Message not specified')

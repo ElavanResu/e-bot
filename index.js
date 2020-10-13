@@ -7,9 +7,10 @@ const { config } = require('dotenv')
 const { initiateReactionAlgo } = require('./features/reactions')
 const { logDeletedMessages } = require('./features/logs')
 const badWordExterminator = require('./features/badWordExterminator')
+const checkUserRestrictions = require('./features/checkUserRestrictions')
 const logChats = require('./features/logChats')
 const captureCustomEmojis = require('./features/captureCustomEmojis')
-const { initialiseSpotifyServices } = require('./services/spotifyServices')
+const { initialiseSpotifyServices } = require('./services/spotify')
 // Creating client instance
 const client = new Discord.Client()
 
@@ -60,14 +61,23 @@ process.on('unhandledRejection', error => {
 const queue = new Map()
 
 client.on('message', async message => {
+	// Log cats and capture custom emojis
 	if (process.env.NODE_ENV === 'production') {
 		logChats(message)
 		captureCustomEmojis(message)
 	}
 
+	// Restrict user
+	if (message.channel.type === 'text' && await checkUserRestrictions(message)) {
+		return null
+	}
+
+	// Bad word exterminator
 	if (badWordExterminator(message)) {
 		return null
 	}
+
+	// Reaction algo
 	const userElavan = message.mentions.users.get('234249678328299520')
 	try {
 		initiateReactionAlgo(message)
@@ -75,6 +85,7 @@ client.on('message', async message => {
 		console.log('Error in initiateReactionAlgo at index.js: ', error)
 	}
 
+	// ElavanResu not available feature
 	if (showNotification && message.mentions.users.size && message.author.id !== '234249678328299520' && message.author.id !== '712367845572345977') {
 		if (userElavan !== undefined) {
 			if (userElavan.presence.status === 'offline') {
@@ -82,16 +93,22 @@ client.on('message', async message => {
 			}
 		}
 	}
-	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || message.author.bot) return
+
+	// Get the prefix and commands
+	if (!message.content.slice(0, prefix.length).toLowerCase().startsWith(prefix) || (message.author.bot && (message.author.id !== '717421303614668841' && message.author.id !== '712367845572345977'))) return
+
 
 	const args = message.content.slice(prefix.length).split(/ +/)
 	const commandName = args.shift().toLowerCase()
+
+	// Leave the guild
 	if (commandName === 'leaveconfirm' && message.author.id === '234249678328299520') {
 		message.channel.send('Good bye.')
 		await message.guild.leave()
 		return
 	}
 
+	// Create commands list
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
 
 	if (!command) return

@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 06 2020
+ * Last Modified: Tue Oct 13 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -14,6 +14,7 @@ const Sequelize = require('sequelize')
 const customEmojisModel = require('./models/CustomEmojis')
 const permissionsModel = require('./models/Permissions.js')
 const customEmojiNames = require('./models/CustomEmojiNames')
+const restrictedUsers = require('./models/RestrictedUsers')
 const { config } = require('dotenv')
 if (process.env.NODE_ENV !== 'production') {
 	config({
@@ -30,6 +31,8 @@ const sequelize = new Sequelize(process.env.MYSQL_DATABASE, process.env.MYSQL_US
 
 const force = process.argv.includes('--force') || process.argv.includes('-f')
 
+// Custom emojis process
+
 const CustomEmojis = customEmojisModel.customEmojisSchema(sequelize, Sequelize.DataTypes)
 
 sequelize.sync({ force }).then(async () => {
@@ -42,6 +45,9 @@ sequelize.sync({ force }).then(async () => {
   }
 }).catch(console.error)
 
+
+// Permissions process
+
 const Permissions = permissionsModel.permissionsSchema(sequelize, Sequelize.DataTypes)
 
 sequelize.sync({ force }).then(async () => {
@@ -51,7 +57,7 @@ sequelize.sync({ force }).then(async () => {
       guild_id: '666931933929930752',
       music_back: true,
       music_queue_clear: true,
-      music_disconnet: true,
+      music_disconnect: true,
       music_next: true,
       music_play: true,
       music_pause: true,
@@ -63,7 +69,8 @@ sequelize.sync({ force }).then(async () => {
       custom_emojis: true,
       custom_emojis_settings: true,
       prune: true,
-      reload_cmd: true
+      reload_cmd: true,
+      modify_restricted_users: true
     })
     console.log('Database synced with Permissions table')
     sequelize.close()
@@ -71,6 +78,9 @@ sequelize.sync({ force }).then(async () => {
     console.log('error: ', error)
   }
 }).catch(console.error)
+
+
+// Custom emoji names process
 
 const CustomEmojiNames = customEmojiNames.customEmojiNamesSchema(sequelize, Sequelize.DataTypes)
 
@@ -83,3 +93,20 @@ sequelize.sync({ force }).then(async () => {
     console.log('error: ', error)
   }
 }).catch(console.error)
+
+
+// Restricted users process
+
+const RestrictedUsers = restrictedUsers.restrictedUsersSchema(sequelize, Sequelize.DataTypes)
+
+sequelize.sync({ force }).then(async () => {
+  try {
+    await RestrictedUsers.upsert({
+      member_id: '312541974844669952',
+      guild_id: '666931933929930752'
+    })
+    console.log('Database synced with restricted users')
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+})

@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 05 2020
+ * Last Modified: Sun Oct 11 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -15,6 +15,7 @@ const { config } = require('dotenv')
 const customEmojiModel = require('./models/CustomEmojis')
 const permissionsModel = require('./models/Permissions.js')
 const customEmojiNames = require('./models/CustomEmojiNames')
+const restrictedUsers = require('./models/RestrictedUsers')
 if (process.env.NODE_ENV !== 'production') {
 	config({
 		path: __dirname + '/.env'
@@ -81,6 +82,25 @@ const getCustomEmojiNamesList = async (memberId) => {
   return await customEmojiNames.getCustomEmojiNamesList(CustomEmojiNames, memberId)
 }
 
+// Restricted Users helpers
+const RestrictedUsers = restrictedUsers.restrictedUsersSchema(sequelize, Sequelize.DataTypes)
+
+const findMember = async (memberId, guildId) => {
+  return await restrictedUsers.findMember(RestrictedUsers, memberId, guildId)
+}
+
+const getAllMembers = async (guildId) => {
+  return await restrictedUsers.getAllMembers(RestrictedUsers, guildId)
+}
+
+const addMember = async (memberId, guildId) => {
+  return await restrictedUsers.addMember(RestrictedUsers, memberId, guildId)
+}
+
+const removeMember = async (memberId, guildId) => {
+  return await restrictedUsers.removeMember(RestrictedUsers, memberId, guildId)
+}
+
 module.exports = {
   addCustomEmoji,
   getEmojiCode,
@@ -92,5 +112,9 @@ module.exports = {
   addCustomEmojiName,
   getCustomEmojiNameDetails,
   delCustomEmojiName,
-  getCustomEmojiNamesList
+  getCustomEmojiNamesList,
+  findMember,
+  getAllMembers,
+  addMember,
+  removeMember
 }

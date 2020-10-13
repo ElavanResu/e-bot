@@ -5,7 +5,7 @@
  * Created Date: Thursday, June 25th 2020, 1:30:17 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Tue Oct 06 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -22,18 +22,26 @@ module.exports = {
 	usage: '',
 	aliases: ['c'],
 	async execute(message, args, musicQueue, queue) {
-		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_queue_clear')) {
-			return message.channel.send(
-				new Discord.MessageEmbed()
-					.setColor('#A6011F')
-					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
-			)
-		}
+		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_queue_clear')) return message.channel.send(
+			new Discord.MessageEmbed()
+				.setColor('#A6011F')
+				.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+		)
+
 		const voiceChannel = message.member.voice.channel
-		if (!voiceChannel) {
-			return message.channel.send('You are not on a voice channel')
-		}
-		if (!musicQueue) return message.channel.send('There is no song that I could skip!')
+		if (!voiceChannel) return message.channel.send(
+			new Discord.MessageEmbed()
+				.setColor('#A6011F')
+				.setDescription(`You are not on a voice channel`)
+		)
+
+		if (!musicQueue) return message.channel.send(
+			new Discord.MessageEmbed()
+				.setColor('#A6011F')
+				.setDescription(`Queue is empty!`)
+		)
+
 		musicQueue.songs = []
+		await message.react('❎')
 	}
 }
