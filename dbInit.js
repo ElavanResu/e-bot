@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 11 2020
+ * Last Modified: Tue Oct 13 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -57,7 +57,7 @@ sequelize.sync({ force }).then(async () => {
       guild_id: '666931933929930752',
       music_back: true,
       music_queue_clear: true,
-      music_disconnet: true,
+      music_disconnect: true,
       music_next: true,
       music_play: true,
       music_pause: true,
