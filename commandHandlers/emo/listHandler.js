@@ -4,7 +4,7 @@
  * Created Date: Sunday, October 4th 2020, 8:01:50 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 05 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -26,7 +26,7 @@ const listHandler = async (message) => {
     emojiListEmbed.setDescription(cmdList)
     return message.channel.send(emojiListEmbed)
   } catch (error) {
-    console.log('error in fetching list:  ', error)
+    console.log('error in fetching emoji list:  ', error)
   }
 }
 

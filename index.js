@@ -6,6 +6,7 @@ const { prefix, showNotification } = require('./config.json')
 const { config } = require('dotenv')
 const { initiateReactionAlgo } = require('./features/reactions')
 const { logDeletedMessages } = require('./features/logs')
+const checkForCustomCommand = require('./features/checkForCustomCommand')
 const badWordExterminator = require('./features/badWordExterminator')
 const checkUserRestrictions = require('./features/checkUserRestrictions')
 const logChats = require('./features/logChats')
@@ -108,6 +109,9 @@ client.on('message', async message => {
 		return
 	}
 
+	// // Custom commands
+	await checkForCustomCommand(client, message, commandName)
+
 	// Create commands list
 	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
 
@@ -154,7 +158,7 @@ client.on('message', async message => {
 	const musicQueue = queue.get(message.guild.id)
 
 	try {
-		await command.execute(message, args, musicQueue, queue)
+		await command.execute(message, args, { musicQueue, queue, client })
 	} catch (error) {
 		console.error(`Error in ||${commandName}|| command: `, error)
 		message.reply(

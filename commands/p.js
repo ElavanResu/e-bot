@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 06 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -62,7 +62,7 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['play'],
 	cooldown: 1,
-	async execute(message, args, musicQueue, queue) {
+	async execute(message, args, { musicQueue, queue }) {
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_play')) {
 			return message.channel.send(
 				new Discord.MessageEmbed()

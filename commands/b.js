@@ -6,7 +6,7 @@
  * Created Date: Thursday, June 25th 2020, 6:15:15 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -22,7 +22,7 @@ module.exports = {
 	usage: '',
 	guildOnly: true,
 	aliases: ['back'],
-	async execute(message, args, musicQueue, queue) {
+	async execute(message, args, { musicQueue, queue }) {
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_back')) {
 			return message.channel.send(
 				new Discord.MessageEmbed()

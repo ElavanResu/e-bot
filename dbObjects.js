@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 11 2020
+ * Last Modified: Thu Oct 15 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,6 +16,7 @@ const customEmojiModel = require('./models/CustomEmojis')
 const permissionsModel = require('./models/Permissions.js')
 const customEmojiNames = require('./models/CustomEmojiNames')
 const restrictedUsers = require('./models/RestrictedUsers')
+const customCommands = require('./models/CustomCommands')
 if (process.env.NODE_ENV !== 'production') {
 	config({
 		path: __dirname + '/.env'
@@ -101,6 +102,25 @@ const removeMember = async (memberId, guildId) => {
   return await restrictedUsers.removeMember(RestrictedUsers, memberId, guildId)
 }
 
+// Custom Command helpers
+const CustomCommands = customCommands.customCommandsSchema(sequelize, Sequelize.DataTypes)
+
+const getCustomMessage = async (guildId, customCommand) => {
+  return await customCommands.getCustomMessage(CustomCommands, guildId, customCommand)
+}
+
+const getAllCommands = async (guildId) => {
+  return await customCommands.getAllCommands(CustomCommands, guildId)
+}
+
+const addCustomCommand = async (guildId, customCommand, customMessage) => {
+  return await customCommands.addCustomCommand(CustomCommands, guildId, customCommand, customMessage)
+}
+
+const removeCustomCommand = async (guildId, customCommand) => {
+  return await customCommands.removeCustomCommand(CustomCommands, guildId, customCommand)
+}
+
 module.exports = {
   addCustomEmoji,
   getEmojiCode,
@@ -116,5 +136,9 @@ module.exports = {
   findMember,
   getAllMembers,
   addMember,
-  removeMember
+  removeMember,
+  getCustomMessage,
+  getAllCommands,
+  addCustomCommand,
+  removeCustomCommand
 }

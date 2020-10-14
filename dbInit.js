@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 13 2020
+ * Last Modified: Thu Oct 15 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -15,6 +15,7 @@ const customEmojisModel = require('./models/CustomEmojis')
 const permissionsModel = require('./models/Permissions.js')
 const customEmojiNames = require('./models/CustomEmojiNames')
 const restrictedUsers = require('./models/RestrictedUsers')
+const customCommands = require('./models/CustomCommands')
 const { config } = require('dotenv')
 if (process.env.NODE_ENV !== 'production') {
 	config({
@@ -70,7 +71,8 @@ sequelize.sync({ force }).then(async () => {
       custom_emojis_settings: true,
       prune: true,
       reload_cmd: true,
-      modify_restricted_users: true
+      modify_restricted_users: true,
+      set_custom_commands: true
     })
     console.log('Database synced with Permissions table')
     sequelize.close()
@@ -106,6 +108,24 @@ sequelize.sync({ force }).then(async () => {
       guild_id: '666931933929930752'
     })
     console.log('Database synced with restricted users')
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+})
+
+
+// Custom Commands process
+
+const CustomCommands = customCommands.customCommandsSchema(sequelize, Sequelize.DataTypes)
+
+sequelize.sync({ force }).then(async () => {
+  try {
+    await CustomCommands.upsert({
+      guild_id: '714365378406383639',
+      custom_command: 'elavan',
+      custom_message: '<@234249678328299520> is a good boi.'
+    })
+    console.log('Database synced with custom commands')
   } catch (error) {
     console.log('Error: ', error)
   }

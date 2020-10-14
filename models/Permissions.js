@@ -4,7 +4,7 @@
  * Created Date: Sunday, October 4th 2020, 1:36:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 13 2020
+ * Last Modified: Thu Oct 15 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -27,7 +27,8 @@ const defaultPemrs = {
   custom_emojis_settings: true,
   prune: false,
   reload_cmd: false,
-  modify_restricted_users: false
+  modify_restricted_users: false,
+  set_custom_commands: false
 }
 const permissionsSchema = (sequelize, DataTypes) => {
   return sequelize.define('permissions', {
@@ -100,6 +101,10 @@ const permissionsSchema = (sequelize, DataTypes) => {
       allowNull: false
     },
     modify_restricted_users: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    set_custom_commands: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     }
@@ -181,7 +186,8 @@ const getMemberPerms = async (SequelizeConnetion, memberId, guildId) => {
         'custom_emojis_settings',
         'prune',
         'reload_cmd',
-        'modify_restricted_users'
+        'modify_restricted_users',
+        'set_custom_commands'
       ]
     })
 
