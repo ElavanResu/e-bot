@@ -25,7 +25,6 @@ module.exports = {
 	moreInfo: `Emoji list:`,
 	cooldown: -1,
 	async execute(message, args) {
-		console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'custom_emojis')) {
 			return message.channel.send(
 				new Discord.MessageEmbed()
@@ -34,7 +33,11 @@ module.exports = {
 			)
 		}
 		if (!message.channel) return console.log('channel not specified')
-		if (!args[0]) return message.channel.send('Emoji not specified')
+		if (!args[0]) return message.channel.send(
+			new Discord.MessageEmbed()
+				.setColor('#A6011F')
+				.setDescription(`Emoji not specified`)
+		)
 
 		if (args[1] !== 's') {
 			message.delete()

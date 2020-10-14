@@ -4,7 +4,7 @@
  * Created Date: Tuesday, October 6th 2020, 12:26:16 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 06 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -22,7 +22,7 @@ module.exports = {
 	usage: '<track number>',
 	moreInfo: `Removes a song from queue`,
   cooldown: -1,
-  async execute(message, args, musicQueue, queue) {
+  async execute(message, args, { musicQueue, queue }) {
     // Check perms
     if (!await checkAndUpdatePerms(message.author.id, message.guild.id, '`music_que_remove_item`')) {
 			return message.channel.send(

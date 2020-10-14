@@ -6,7 +6,7 @@
  * Created Date: Thursday, June 25th 2020, 12:47:28 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 06 2020
+ * Last Modified: Wed Oct 14 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -22,7 +22,7 @@ module.exports = {
 	usage: '',
 	guildOnly: true,
 	aliases: ['next'],
-	async execute(message, args, musicQueue, queue) {
+	async execute(message, args, { musicQueue, queue }) {
 
 		// Check perms
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_next')) {
