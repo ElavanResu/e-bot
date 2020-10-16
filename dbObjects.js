@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Oct 15 2020
+ * Last Modified: Sat Oct 17 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -17,6 +17,7 @@ const permissionsModel = require('./models/Permissions.js')
 const customEmojiNames = require('./models/CustomEmojiNames')
 const restrictedUsers = require('./models/RestrictedUsers')
 const customCommands = require('./models/CustomCommands')
+const favoriteEmoji = require('./models/FavoriteEmojis')
 if (process.env.NODE_ENV !== 'production') {
 	config({
 		path: __dirname + '/.env'
@@ -121,6 +122,21 @@ const removeCustomCommand = async (guildId, customCommand) => {
   return await customCommands.removeCustomCommand(CustomCommands, guildId, customCommand)
 }
 
+// Favorite Emoji helpers
+const FavoriteEmoji = favoriteEmoji.favoriteEmojisSchema(sequelize, Sequelize.DataTypes)
+
+const getFavoriteEmojiNamesList = async (memberId) => {
+  return await favoriteEmoji.getFavoriteEmojiNamesList(FavoriteEmoji, memberId)
+}
+
+const addFavoriteEmoji = async (memberId, emojiName) => {
+  return await favoriteEmoji.addFavoriteEmoji(FavoriteEmoji, CustomEmojis, memberId, emojiName)
+}
+
+const delFavoriteEmoji = async (memberId, emojisName) => {
+  return await favoriteEmoji.delFavoriteEmoji(FavoriteEmoji, memberId, emojisName)
+}
+
 module.exports = {
   addCustomEmoji,
   getEmojiCode,
@@ -140,5 +156,8 @@ module.exports = {
   getCustomMessage,
   getAllCommands,
   addCustomCommand,
-  removeCustomCommand
+  removeCustomCommand,
+  getFavoriteEmojiNamesList,
+  addFavoriteEmoji,
+  delFavoriteEmoji
 }

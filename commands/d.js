@@ -5,7 +5,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Fri Oct 16 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -35,7 +35,11 @@ module.exports = {
 		try {
 			const voiceChannel = message.member.voice.channel
 			if (!voiceChannel) {
-				return message.channel.send('You are not on a voice channel')
+				return message.channel.send(
+					new Discord.MessageEmbed()
+						.setColor('#A6011F')
+						.setDescription(`You are not on a voice channel`)
+				)
 			}
 			await message.react('😭')
 			voiceChannel.leave()

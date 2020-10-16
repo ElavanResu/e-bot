@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Fri Oct 16 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -39,18 +39,14 @@ module.exports = {
 				.setDescription(`Emoji not specified`)
 		)
 
-		if (args[1] !== 's') {
-			message.delete()
-		}
-
+		message.delete()
 		// if (!args[0].startsWith('<@')) return console.log('Mention user')
 		// if (!args[1]) return console.log('Message not specified')
 		// const msg = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
 		// const mentionedUser = message.mentions.users.first()
 		try {
-			const emojiCode = await getEmojiCodeHandler(message, args[0])
-			if (!emojiCode) {
-				console.log('jdwjdwjdw-----------------------------')
+			const emojiCodeResponse = await getEmojiCodeHandler(message, args[0])
+			if (!emojiCodeResponse) {
 				const messageToDelete = await message.channel.send(
 					new Discord.MessageEmbed()
 						.setColor('#A6011F')
@@ -61,6 +57,12 @@ module.exports = {
 				}, 6000)
 				return
 			}
+			let emojiMessage
+			if (args[1] === 's') {
+				emojiMessage = `${args[2]} -   ${emojiCodeResponse.emojiCode}    ---    ${emojiCodeResponse.emojiName}`
+			} else {
+				emojiMessage = `${emojiCodeResponse.emojiCode}`
+			}
 			message.channel.fetchWebhooks()
 			.then(webhook => {
 				let foundHook
@@ -70,7 +72,7 @@ module.exports = {
 				if (!foundHook) {
 					message.channel.createWebhook('SimonHook')
 						.then(newWebhook => {
-							newWebhook.send(emojiCode, {
+							newWebhook.send(emojiMessage, {
 								'username': message.author.username,
 								'avatarURL': `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`
 							})
@@ -81,7 +83,7 @@ module.exports = {
 						})
 				}
 				else {
-					foundHook.send(emojiCode, {
+					foundHook.send(emojiMessage, {
 						'username': message.author.username,
 						'avatarURL': `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`,
 						// 'embeds': [{

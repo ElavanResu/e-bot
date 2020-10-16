@@ -13,6 +13,7 @@
 const Discord = require('discord.js')
 const permsListHandler = require('../commandHandlers/perms/permsListHandler')
 const setPermsHandler = require('../commandHandlers/perms/setPermsHandler')
+const globalUsers = require('../metaData/globalUsers')
 
 module.exports = {
 	name: 'perms',
@@ -37,7 +38,7 @@ module.exports = {
         return message.channel.send(
           new Discord.MessageEmbed()
             .setColor('#A6011F')
-            .setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+            .setDescription(`Sorry, no one is allowed to use the system features`)
         )
       }
 
