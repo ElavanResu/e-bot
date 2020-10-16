@@ -59,7 +59,7 @@ module.exports = {
 			}
 			let emojiMessage
 			if (args[1] === 's') {
-				emojiMessage = `${emojiCodeResponse.emojiCode}    ---    ${emojiCodeResponse.emojiName}`
+				emojiMessage = `${args[2]} -   ${emojiCodeResponse.emojiCode}    ---    ${emojiCodeResponse.emojiName}`
 			} else {
 				emojiMessage = `${emojiCodeResponse.emojiCode}`
 			}

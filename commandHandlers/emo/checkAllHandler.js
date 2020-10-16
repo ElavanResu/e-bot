@@ -26,7 +26,7 @@ const checkAllHandler = async (message) => {
     // })
     for (let count = 0; count < emojiList.length; count++) {
       await timer(2000)
-      await message.channel.send(`${config.prefix}e ${emojiList[count].emoji_name} s`)
+      await message.channel.send(`${config.prefix}e ${emojiList[count].emoji_name} s ${count + 1}`)
     }
     return null
   } catch (error) {
