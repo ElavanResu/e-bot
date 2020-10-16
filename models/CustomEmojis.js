@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 12:39:52 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Fri Oct 16 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -47,7 +47,10 @@ const getEmojiCode = async (SequelizeConnetion, emojiName) => {
     })
 
     if (customEmoji) {
-      return customEmoji.emoji_global_code
+      return {
+        emojiCode: customEmoji.emoji_global_code,
+        emojiName: customEmoji.emoji_name
+      }
     } else {
       return null
     }

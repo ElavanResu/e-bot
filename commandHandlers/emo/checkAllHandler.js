@@ -21,12 +21,11 @@ const timer = (ms) => {
 const checkAllHandler = async (message) => {
   try {
     const emojiList = await getEmojiList()
-    console.log('gotototo', JSON.stringify(emojiList))
     // emojiList.forEach(ele => {
     //   message.channel.send(ele.emoji_global_code)
     // })
     for (let count = 0; count < emojiList.length; count++) {
-      await timer(1500)
+      await timer(2000)
       await message.channel.send(`${config.prefix}e ${emojiList[count].emoji_name} s`)
     }
     return null

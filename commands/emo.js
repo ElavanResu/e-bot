@@ -51,7 +51,7 @@ module.exports = {
         return message.channel.send(
           new Discord.MessageEmbed()
             .setColor('#A6011F')
-            .setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+            .setDescription(`Sorry, no one is allowed to use the system features`)
         )
       }
       await checkAllHandler(message)
@@ -61,7 +61,7 @@ module.exports = {
       if (!globalUsers.hasOwnProperty(message.author.id)) return message.channel.send(
         new Discord.MessageEmbed()
           .setColor('#A6011F')
-          .setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+          .setDescription(`Sorry, no one is allowed to use the system features`)
       )
 
       if (!args[1]) return message.channel.send(
