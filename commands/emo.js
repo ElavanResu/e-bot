@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 4:33:24 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Oct 16 2020
+ * Last Modified: Sat Oct 17 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -20,6 +20,9 @@ const delCustomNameHandler = require('../commandHandlers/emo/delCustomNameHandle
 const customListHandler = require('../commandHandlers//emo/customListHandler')
 const addEmojiCodeManuallyHelper = require('../commandHandlers/emo/addEmojiCodeManuallyHelper')
 const checkAllHandler = require('../commandHandlers/emo/checkAllHandler')
+const favoriteListHandler = require('../commandHandlers/emo/favoriteListHandler')
+const setFavoriteEmojiHandler = require('../commandHandlers/emo/setFavoriteEmojiHandler')
+const delFavoriteEmojiHandler = require('../commandHandlers/emo/delFavoriteEmojiHandler')
 
 module.exports = {
   name: 'emo',
@@ -57,6 +60,8 @@ module.exports = {
       await checkAllHandler(message)
     } else if (args[0] === 'customlist' || args[0] === 'custlist') {
       await customListHandler(message)
+    } else if (args[0] === 'favlist') {
+      await favoriteListHandler(message)
     } else if (args[0] === 'manset') {
       if (!globalUsers.hasOwnProperty(message.author.id)) return message.channel.send(
         new Discord.MessageEmbed()
@@ -92,6 +97,17 @@ module.exports = {
       } catch (error) {
         console.log('error in setting up aliases:  ', error)
       }
+    } else if (args[0] === 'setfav') {
+      try {
+        if (!args[1]) return message.channel.send(
+          new Discord.MessageEmbed()
+            .setColor('#A6011F')
+            .setDescription('Emoji name not specified')
+        )
+        await setFavoriteEmojiHandler(message, message.author.id, args[1])
+      } catch (error) {
+        console.log('error in setting up aliases:  ', error)
+      }
     } else if (args[0] === 'del') {
       if (!args[1]) return message.channel.send(
         new Discord.MessageEmbed()
@@ -99,6 +115,13 @@ module.exports = {
           .setDescription('Emoji name not specified')
       )
       await delCustomNameHandler(message, message.author.id, args[1])
+    } else if (args[0] === 'delfav') {
+      if (!args[1]) return message.channel.send(
+        new Discord.MessageEmbed()
+          .setColor('#A6011F')
+          .setDescription('Emoji name not specified')
+      )
+      await delFavoriteEmojiHandler(message, message.author.id, args[1])
     }
   }
 }

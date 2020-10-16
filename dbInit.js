@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Oct 15 2020
+ * Last Modified: Sat Oct 17 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,6 +16,7 @@ const permissionsModel = require('./models/Permissions.js')
 const customEmojiNames = require('./models/CustomEmojiNames')
 const restrictedUsers = require('./models/RestrictedUsers')
 const customCommands = require('./models/CustomCommands')
+const favoriteEmoji = require('./models/FavoriteEmojis')
 const { config } = require('dotenv')
 if (process.env.NODE_ENV !== 'production') {
 	config({
@@ -126,6 +127,22 @@ sequelize.sync({ force }).then(async () => {
       custom_message: '<@234249678328299520> is a good boi.'
     })
     console.log('Database synced with custom commands')
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+})
+
+// Favorite emoji process
+
+const FavoriteEmoji = favoriteEmoji.favoriteEmojisSchema(sequelize, Sequelize.DataTypes)
+
+sequelize.sync({ force }).then(async () => {
+  try {
+    await FavoriteEmoji.upsert({
+      emoji_name: 'nopenope',
+      member_id: '714365378406383639'
+    })
+    console.log('Database synced with favorite list')
   } catch (error) {
     console.log('Error: ', error)
   }
