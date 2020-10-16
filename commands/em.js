@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Fri Oct 16 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -50,7 +50,6 @@ module.exports = {
 		try {
 			const emojiCode = await getEmojiCodeHandler(message, args[0])
 			if (!emojiCode) {
-				console.log('jdwjdwjdw-----------------------------')
 				const messageToDelete = await message.channel.send(
 					new Discord.MessageEmbed()
 						.setColor('#A6011F')

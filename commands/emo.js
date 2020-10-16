@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 4:33:24 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Fri Oct 16 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -47,6 +47,13 @@ module.exports = {
     if (args[0] === 'list') {
       await listHandler(message)
     } else if (args[0] === 'checkall') {
+      if (!globalUsers.hasOwnProperty(message.author.id)) {
+        return message.channel.send(
+          new Discord.MessageEmbed()
+            .setColor('#A6011F')
+            .setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
+        )
+      }
       await checkAllHandler(message)
     } else if (args[0] === 'customlist' || args[0] === 'custlist') {
       await customListHandler(message)
