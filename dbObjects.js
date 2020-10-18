@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 17 2020
+ * Last Modified: Mon Oct 19 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -18,6 +18,7 @@ const customEmojiNames = require('./models/CustomEmojiNames')
 const restrictedUsers = require('./models/RestrictedUsers')
 const customCommands = require('./models/CustomCommands')
 const favoriteEmoji = require('./models/FavoriteEmojis')
+const memberReactions = require('./models/MemberReactions')
 if (process.env.NODE_ENV !== 'production') {
 	config({
 		path: __dirname + '/.env'
@@ -137,6 +138,25 @@ const delFavoriteEmoji = async (memberId, emojisName) => {
   return await favoriteEmoji.delFavoriteEmoji(FavoriteEmoji, memberId, emojisName)
 }
 
+// Member Reactions helpers
+const MemberReactions = memberReactions.memberReactionsSchema(sequelize, Sequelize.DataTypes)
+
+const getReactionsDetailsForMember = async (memberId) => {
+  return await memberReactions.getReactionsDetailsForMember(MemberReactions, memberId)
+}
+
+const getAllMemberReactionsDetails = async () => {
+  return await memberReactions.getAllMemberReactionsDetails(MemberReactions)
+}
+
+const addReactionsDetails= async (memberId, guildId, data) => {
+  return await memberReactions.addReactionsDetails(MemberReactions, memberId, guildId, data)
+}
+
+const removeReactionsDetails = async (memberId, guildId) => {
+  return await memberReactions.removeReactionsDetails(MemberReactions, memberId, guildId)
+}
+
 module.exports = {
   addCustomEmoji,
   getEmojiCode,
@@ -159,5 +179,9 @@ module.exports = {
   removeCustomCommand,
   getFavoriteEmojiNamesList,
   addFavoriteEmoji,
-  delFavoriteEmoji
+  delFavoriteEmoji,
+  getReactionsDetailsForMember,
+  getAllMemberReactionsDetails,
+  addReactionsDetails,
+  removeReactionsDetails
 }

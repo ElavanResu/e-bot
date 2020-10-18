@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Oct 16 2020
+ * Last Modified: Sun Oct 18 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -50,7 +50,7 @@ module.exports = {
 				const messageToDelete = await message.channel.send(
 					new Discord.MessageEmbed()
 						.setColor('#A6011F')
-						.setDescription(`**${args[0]}** is not an invalid emoji name. This message will get deleted in 6 seconds.`)
+						.setDescription(`**${args[0]}** is an invalid emoji name. This message will get deleted in 6 seconds.`)
 				)
 				setTimeout(() => {
 					messageToDelete.delete()
