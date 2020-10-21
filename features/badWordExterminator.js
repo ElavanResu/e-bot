@@ -4,16 +4,22 @@
  * Created Date: Tuesday, June 9th 2020, 11:29:38 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Wed Oct 21 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-module.exports = (message) => {
-	const existHaremWord = message.content.toLowerCase().match(/shubham|navale/g)
+const { selectedOwnerWords } = require('../metaData/words')
+const transformSentence = require('../functionHelpers/transformSentence')
+
+const checkWords = new RegExp(selectedOwnerWords.toString().replace(/,+/g, '|'), 'g')
+
+module.exports = async (message) => {
+	const modifiedSentence = transformSentence(message.content)
+	const existHaremWord = modifiedSentence.toLowerCase().match(checkWords)
 	if (existHaremWord !== null) {
-		message.delete()
+		await message.delete()
 		return true
 	}
 }

@@ -4,122 +4,58 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Wed Oct 21 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-
-const userTable = {
-	elavan: {
-		id: '234249678328299520',
-		reactions: ['✋', '👁️', '🤚'],
-		// reactions: ['🅰️'],
-		checkWords: /elavan|elavanresu|resu|navale|shubham/g,
-		evadeBot: true,
-		bellowElavan: false,
-		showOnMention: true,
-		everytime: false,
-	},
-	jaegar: {
-		id: '427000717681885185',
-		reactions: ['🏳️‍🌈'],
-		checkWords: /jaegar|gulkand|gulkandkush|jae/g,
-		evadeBot: false,
-		bellowElavan: true,
-		showOnMention: true,
-		everytime: false,
-	},
-	being: {
-		id: '312541974844669952',
-		reactions: ['🥺'],
-		checkWords: /being|ancient/g,
-		evadeBot: false,
-		bellowElavan: true,
-		showOnMention: true,
-		everytime: false,
-	},
-	pushkie: {
-		id: '686973497250938929',
-		reactions: ['👑'],
-		checkWords: /flaca|pushkie|pushkraj|pushieee/g,
-		evadeBot: false,
-		bellowElavan: false,
-		showOnMention: true,
-		everytime: true,
-	},
-	// pounder: {
-	// 	id: '213519729296539648',
-	// 	reactions: ['🍔'],
-	// 	// checkWords: /being|ancient/g,
-	// 	evadeBot: false,
-	// 	bellowElavan: true,
-	// 	showOnMention: false,
-	// 	everytime: true,
-	// },
-	clover: {
-		id: '545307696988160011',
-		reactions: ['🐝'],
-		evadeBot: false,
-		bellowElavan: false,
-		showOnMention: true,
-		everytime: false,
-	},
-	// dhruv: {
-	// 	id: '460488764511223848',
-	// 	reactions: ['🍄'],
-	// 	evadeBot: false,
-	// 	bellowElavan: true,
-	// 	showOnMention: true,
-	// 	everytime: true,
-	// },
-	nathan: {
-		id: '232793743374155777',
-		reactions: ['🇫', '🇦', '🇬'],
-		evadeBot: false,
-		bellowElavan: true,
-		showOnMention: true,
-		everytime: true,
-	},
-	jerry: {
-		id: '485378865481383987',
-		reactions: ['🎶'],
-		checkWords: /jerry/g,
-		evadeBot: false,
-		bellowElavan: true,
-		showOnMention: true,
-		everytime: false,
-	},
-}
+const { getAllMemberReactionsDetails } = require('../dbObjects')
 
 const initiateReactionAlgo = async (message) => {
-	const allUsers = Object.keys(userTable)
-	for (let userCount = 0; userCount < allUsers.length; userCount++) {
-		const userObject = userTable[allUsers[userCount]]
-		const checkEverytime = userObject.everytime && message.author.id === userObject.id
+	try {
+		const memberReactionsDetails = await getAllMemberReactionsDetails(message.author.id)
+		if (!memberReactionsDetails) return
+		for (let memberCount = 0; memberCount < memberReactionsDetails.length; memberCount++) {
+			// Get member reaction details
+			const memberObject = memberReactionsDetails[memberCount].dataValues
 
-		const mentionedUser = message.mentions.users.get(userObject.id)
-		const matchedWords = message.content.toLowerCase().match(userObject.checkWords || null)
+			// Check for everytime conditions
+			const checkEverytime = memberObject.everytime && message.author.id === memberObject.member_id
 
-		const confirmReact = (userObject.showOnMention && mentionedUser !== undefined) || (userObject.checkWords !== undefined && matchedWords !== null)
+			// Get mentioned user if present
+			const mentionedUser = message.mentions.users.get(memberObject.member_id)
 
-		const checkBot = !(userObject.evadeBot && message.author.id === '712367845572345977')
+			// Check for words
+			let matchedWords = null
+			if (memberObject.check_words !== null && memberObject.check_words.length > 0) {
+				const checkWords = new RegExp(memberObject.check_words, 'g')
+				matchedWords = message.content.toLowerCase().match(checkWords)
+			}
 
-		const checlElavanMention = message.mentions.users.get('234249678328299520')
-		const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g)
-		const checkElavan = !(userObject.bellowElavan && (checlElavanMention !== undefined || matchedElavanWords !== null))
+			// Get the final check
+			const confirmReact = (memberObject.show_on_mention && mentionedUser !== undefined) || (matchedWords !== null)
 
-		if ((checkElavan && (checkEverytime || confirmReact)) && checkBot) {
-			try {
-				for (let counter = 0; counter < userObject.reactions.length; counter++) {
-					message.react(userObject.reactions[counter])
+			// Check for bot
+			const checkBot = !(memberObject.evade_bot && message.author.bot)
+
+			// Check for Elavan's mention
+			const checkElavanMention = message.mentions.users.get('234249678328299520')
+
+			// Check for Elavan words
+			const matchedElavanWords = message.content.toLowerCase().match(/elavan|elavanresu|resu|navale|shubham/g)
+
+			// Final check for elavan
+			const checkElavan = !(memberObject.bellow_elavan && (checkElavanMention !== undefined || matchedElavanWords !== null))
+			if ((checkElavan && (checkEverytime || confirmReact)) && checkBot) {
+				const reactions = memberObject.reactions.split(/,+/g)
+				for (let counter = 0; counter < reactions.length; counter++) {
+					message.react(reactions[counter])
 				}
 			}
-			catch (error) {
-				console.error('One of the emojis failed to react')
-			}
 		}
+	} catch (error) {
+		console.log('Error in initiateReactionAlgo: ', error)
 	}
 }
 
