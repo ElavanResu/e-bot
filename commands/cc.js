@@ -4,7 +4,7 @@
  * Created Date: Wednesday, October 14th 2020, 10:57:26 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Oct 15 2020
+ * Last Modified: Mon Oct 19 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -15,6 +15,10 @@ const Discord = require('discord.js')
 const addCustomCommandHandler = require('../commandHandlers/cm/addCustomCommandHandler')
 const listHandler = require('../commandHandlers/cm/listHandler')
 const removeCustomCommandHandler = require('../commandHandlers/cm/removeCustomCommandHandler')
+const globalUsers = require('../metaData/globalUsers')
+const { allOwnerWords } = require('../metaData/words')
+
+const regexCheck = new RegExp(allOwnerWords.toString().replace(/,+/g, '|'), 'g')
 
 module.exports = {
 	name: 'cc',
@@ -48,6 +52,11 @@ module.exports = {
         new Discord.MessageEmbed()
           .setColor('#A6011F')
           .setDescription(`Custom command not specified`)
+      )
+      if(args[1].toLowerCase().match(regexCheck) && !globalUsers.hasOwnProperty(message.author.id)) return message.channel.send(
+        new Discord.MessageEmbed()
+          .setColor('#A6011F')
+          .setDescription(`You are not allowed to use my master's name.`)
       )
 
       // Check for custom message

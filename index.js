@@ -62,6 +62,7 @@ process.on('unhandledRejection', error => {
 const queue = new Map()
 
 client.on('message', async message => {
+	console.log('message: ', message.content)
 	// Log cats and capture custom emojis
 	if (process.env.NODE_ENV === 'production') {
 		logChats(message)
@@ -74,7 +75,7 @@ client.on('message', async message => {
 	}
 
 	// Bad word exterminator
-	if (badWordExterminator(message)) {
+	if (await badWordExterminator(message)) {
 		return null
 	}
 

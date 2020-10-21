@@ -4,7 +4,7 @@
  * Created Date: Sunday, May 24th 2020, 8:04:11 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 19 2020
+ * Last Modified: Wed Oct 21 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -28,7 +28,7 @@ const initiateReactionAlgo = async (message) => {
 
 			// Check for words
 			let matchedWords = null
-			if (memberObject.check_words !== null) {
+			if (memberObject.check_words !== null && memberObject.check_words.length > 0) {
 				const checkWords = new RegExp(memberObject.check_words, 'g')
 				matchedWords = message.content.toLowerCase().match(checkWords)
 			}
