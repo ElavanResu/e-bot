@@ -4,7 +4,7 @@
  * Created Date: Monday, May 25th 2020, 6:02:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Wed Oct 21 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -33,9 +33,9 @@ module.exports = {
 		if (!args[1]) return console.log('Message not specified')
 		const msg = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
 		const mentionedUser = message.mentions.users.first()
+		const impersonatedName = await message.guild.members.fetch({ user: mentionedUser, force: true })
 		message.channel.fetchWebhooks()
 			.then(webhook => {
-				console.log('Webhook: ', webhook)
 				let foundHook
 				webhook.forEach(ele => {
 					if (ele.name === 'SimonHook') foundHook = ele
@@ -45,7 +45,7 @@ module.exports = {
 					message.channel.createWebhook('SimonHook')
 						.then(newWebhook => {
 							newWebhook.send(`${msg}`, {
-								'username': mentionedUser.username,
+								'username': impersonatedName.displayName,
 								'avatarURL': `${mentionedUser.displayAvatarURL({ format: 'png', dynamic: true })}`,
 							// 'embeds': [{
 							// 	'color': parseInt(`0x${color}`),
@@ -59,9 +59,8 @@ module.exports = {
 						})
 				}
 				else {
-					console.log('avatarUrl: ', mentionedUser.avatarURL)
 					foundHook.send(`${msg}`, {
-						'username': mentionedUser.username,
+						'username': impersonatedName.displayName,
 						'avatarURL': `${mentionedUser.displayAvatarURL({ format: 'png', dynamic: true })}`,
 						// 'embeds': [{
 						// 	// 'color': parseInt(`0x${color}`),

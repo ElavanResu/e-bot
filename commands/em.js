@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 18 2020
+ * Last Modified: Wed Oct 21 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -63,6 +63,7 @@ module.exports = {
 			} else {
 				emojiMessage = `${emojiCodeResponse.emojiCode}`
 			}
+			const authorDetails = await message.guild.members.fetch({ user: message.author, force: true })
 			message.channel.fetchWebhooks()
 			.then(webhook => {
 				let foundHook
@@ -73,7 +74,7 @@ module.exports = {
 					message.channel.createWebhook('SimonHook')
 						.then(newWebhook => {
 							newWebhook.send(emojiMessage, {
-								'username': message.author.username,
+								'username': authorDetails.displayName,
 								'avatarURL': `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`
 							})
 						})
@@ -84,7 +85,7 @@ module.exports = {
 				}
 				else {
 					foundHook.send(emojiMessage, {
-						'username': message.author.username,
+						'username': authorDetails.displayName,
 						'avatarURL': `${message.author.displayAvatarURL({ format: 'png', dynamic: true })}`,
 						// 'embeds': [{
 						// 	// 'color': parseInt(`0x${color}`),
