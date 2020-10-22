@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 21 2020
+ * Last Modified: Thu Oct 22 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -32,7 +32,6 @@ module.exports = {
 					.setDescription(`Sorry, you are not allowed to use this feature, contact the owner`)
 			)
 		}
-		if (!message.channel) return console.log('channel not specified')
 		if (!args[0]) return message.channel.send(
 			new Discord.MessageEmbed()
 				.setColor('#A6011F')

@@ -4,21 +4,39 @@
  * Created Date: Tuesday, June 9th 2020, 11:29:38 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 21 2020
+ * Last Modified: Thu Oct 22 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-const { selectedOwnerWords } = require('../metaData/words')
+const { selectedOwnerWords, badBotData } = require('../metaData/words')
 const transformSentence = require('../functionHelpers/transformSentence')
 
 const checkWords = new RegExp(selectedOwnerWords.toString().replace(/,+/g, '|'), 'g')
 
+const checkForBadBot = (message) => {
+	let badBotDetected = false
+	for (let count = 0; count < badBotData.length; count++) {
+		const badBotDetails = badBotData[count]
+		if (message.author.bot && badBotDetails.id === message.author.id && badBotDetails.username === message.author.username && badBotDetails.discriminator === message.author.discriminator) {
+			const modifiedSentence = transformSentence(message.content)
+			const regxModifiedWords = new RegExp(badBotDetails.words.toString().replace(/,+/g, '|'), 'g')
+			const existHaremWord = modifiedSentence.toLowerCase().match(regxModifiedWords)
+			if (existHaremWord) {
+				badBotDetected = true
+				break
+			}
+		}
+	}
+	return badBotDetected
+}
+
 module.exports = async (message) => {
 	const modifiedSentence = transformSentence(message.content)
 	const existHaremWord = modifiedSentence.toLowerCase().match(checkWords)
-	if (existHaremWord !== null) {
+	const badBotDetected = checkForBadBot(message)
+	if (existHaremWord !== null || badBotDetected) {
 		await message.delete()
 		return true
 	}
