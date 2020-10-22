@@ -4,7 +4,7 @@
  * Created Date: Monday, October 19th 2020, 9:15:25 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Oct 22 2020
+ * Last Modified: Fri Oct 23 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -36,7 +36,7 @@ const scandsMapper = {
   w: 'w,ẃ,ẁ,ŵ,ẅ,ẇ,ẉ,ẘ,ⱳ,ᴡ,ｗ',
   x: 'x,ẍ,ẋ,ᶍ,ｘ',
   y: 'y,ý,ỳ,ŷ,ẙ,ÿ,ỹ,ẏ,ȳ,ỷ,ỵ,ɏ,ƴ,ʏ,ｙ',
-  z: 'z,ź,ẑ,ż,ẓ,ẕ,ƶ,ȥ,ⱬ,ᵶ,ᶎ,ʐ,ʑ,ɀ,ᴢ,ʒ,ƹ,ｚ,ǳ,ž,ǆ',
+  z: 'z,ź,ẑ,ż,ẓ,ẕ,ƶ,ȥ,ⱬ,ᵶ,ᶎ,ʐ,ʑ,ɀ,ᴢ,ʒ,ƹ,ｚ,ǳ,ž,ǆ'
 }
 
 const allOwnerWords = [

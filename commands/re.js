@@ -4,7 +4,7 @@
  * Created Date: Wednesday, October 21st 2020, 9:19:01 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 21 2020
+ * Last Modified: Fri Oct 23 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -12,6 +12,7 @@
  */
 const Discord = require('discord.js')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
+const reactMessageHandler = require('../commandHandlers/re/reactMessageHandler')
 
 module.exports = {
 	name: 're',
@@ -56,8 +57,10 @@ module.exports = {
 			new Discord.MessageEmbed()
 				.setColor('#A6011F')
 				.setDescription(`Emoji not specified`)
-    )
+		)
 
-    message.delete()
+		await reactMessageHandler(message, args[0], args[1])
+
+    // message.delete()
   }
 }
