@@ -4,7 +4,7 @@
  * Created Date: Monday, October 19th 2020, 9:15:25 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 21 2020
+ * Last Modified: Thu Oct 22 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -12,7 +12,7 @@
  */
 const scandsMapper = {
   a: 'æ,ã,å,ā,à,á,â,ä,a',
-  b: 'b',
+  b: 'b,ß',
   c: 'ç,c',
   d: 'd',
   e: 'ē,ê,ë,è,é,e',
@@ -53,8 +53,18 @@ const selectedOwnerWords = [
   'shubham'
 ]
 
+const badBotData = [
+  {
+    username: 'MEE6',
+    id: '765790362149060649',
+    discriminator: '0000',
+    words: allOwnerWords
+  }
+]
+
 module.exports = {
   allOwnerWords,
   selectedOwnerWords,
-  scandsMapper
+  scandsMapper,
+  badBotData
 }
