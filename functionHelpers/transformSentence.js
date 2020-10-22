@@ -4,7 +4,7 @@
  * Created Date: Monday, October 19th 2020, 10:15:33 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 21 2020
+ * Last Modified: Thu Oct 22 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,7 +16,7 @@ const transformSentence = (sentence) => {
   let modifiedSentence = sentence
   Object.keys(scandsMapper).forEach(ele => {
     const regexChecker = new RegExp('(' + scandsMapper[ele].replace(/,+/g, '|') + ')', 'g')
-    modifiedSentence = modifiedSentence.replace(regexChecker,ele)
+    modifiedSentence = modifiedSentence.toLowerCase().replace(regexChecker,ele)
   })
   return modifiedSentence
 }
