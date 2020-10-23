@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:41:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 21 2020
+ * Last Modified: Fri Oct 23 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -18,6 +18,7 @@ const restrictedUsers = require('./models/RestrictedUsers')
 const customCommands = require('./models/CustomCommands')
 const favoriteEmoji = require('./models/FavoriteEmojis')
 const memberReactions = require('./models/MemberReactions')
+const playlists = require('./models/Playlists')
 const { config } = require('dotenv')
 if (process.env.NODE_ENV !== 'production') {
 	config({
@@ -74,7 +75,8 @@ sequelize.sync({ force }).then(async () => {
       prune: true,
       reload_cmd: true,
       modify_restricted_users: true,
-      set_custom_commands: true
+      set_custom_commands: true,
+      playlists: true
     })
     console.log('Database synced with Permissions table')
     sequelize.close()
@@ -166,6 +168,24 @@ sequelize.sync({ force }).then(async () => {
       everytime: false
     })
     console.log('Database synced with member reactions')
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+})
+
+
+// Playlist process
+
+const Playlists = playlists.playlistsSchema(sequelize, Sequelize.DataTypes)
+
+sequelize.sync({ force }).then(async () => {
+  try {
+    await Playlists.upsert({
+      playlist_name: 'Linkin Park',
+      member_id: '234249678328299520',
+      playlist: '[{"title":"In The End (Official HD Video) - Linkin Park","url":"https://www.youtube.com/watch?v=eVTXPUF4Oz4","requestedBy":"234249678328299520"}]'
+    })
+    console.log('Database synced with playlists')
   } catch (error) {
     console.log('Error: ', error)
   }
