@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Mon Oct 26 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -44,7 +44,7 @@ const play = (message, queue, guild, song) => {
 	})
 
 	dispatcher.on('error', (error) => {
-		const hook = new Discord.WebhookClient(`${process.env.HOOKID}`, `${process.env.HOOKTOKEN}`)
+		const hook = new Discord.WebhookClient(`${process.env.ERRORHOOKID}`, `${process.env.ERRORHOOKTOKEN}`)
 		hook.send(`There is an error in dispatcher: ${error}\n\n ${JSON.stringify(error)}`,{
 			username: `Music Bot`,
 			avatarURL: `https://i.imgur.com/5Dctm5N.jpg`

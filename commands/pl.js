@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 11:27:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 24 2020
+ * Last Modified: Mon Oct 26 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -50,6 +50,7 @@ module.exports = {
       const playlistName = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
 
       const playlist = await getMemberPlaylistHandler(message, playlistName)
+      console.log('Playlist: ', playlist)
 
     }
   }

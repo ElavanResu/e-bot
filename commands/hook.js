@@ -4,7 +4,7 @@
  * Created Date: Monday, May 25th 2020, 6:02:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 21 2020
+ * Last Modified: Mon Oct 26 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -38,11 +38,11 @@ module.exports = {
 			.then(webhook => {
 				let foundHook
 				webhook.forEach(ele => {
-					if (ele.name === 'SimonHook') foundHook = ele
+					if (ele.name === 'E-Bot') foundHook = ele
 				})
 				console.log('Then1: ', foundHook)
 				if (!foundHook) {
-					message.channel.createWebhook('SimonHook')
+					message.channel.createWebhook('E-Bot')
 						.then(newWebhook => {
 							newWebhook.send(`${msg}`, {
 								'username': impersonatedName.displayName,
