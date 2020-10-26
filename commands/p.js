@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 26 2020
+ * Last Modified: Tue Oct 27 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -35,7 +35,10 @@ const play = (message, queue, guild, song) => {
 			.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`)
 	)
 
-	const dispatcher = musicQueue.connection.play(ytdl(song.url))
+	const dispatcher = musicQueue.connection.play(ytdl(song.url, {
+		quality: 'highestaudio',
+    highWaterMark: 1 << 25
+	}))
 
 	dispatcher.on('finish', () => {
 		console.log('Music ended!')
@@ -62,7 +65,7 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['play'],
 	cooldown: 1,
-	async execute(message, args, { musicQueue, queue }) {
+	async execute(message, args, { musicQueue, queue, playlist, add }) {
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'music_play')) {
 			return message.channel.send(
 				new Discord.MessageEmbed()
@@ -81,33 +84,43 @@ module.exports = {
 			}
 			const permissions = voiceChannel.permissionsFor(message.client.user)
 			if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
-				return message.channel.send('I need the permissions to join and speak in your voice channel!')
+				return message.channel.send(
+					new Discord.MessageEmbed()
+						.setColor('#A6011F')
+						.setDescription(`I need the permissions to join and speak in your voice channel!`)
+				)
 			}
 
-
-			const searchString = args.toString().replace(/[, ]+/g, ' ')
 			let newSongsQueue = []
-			if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
-				newSongsQueue = await youtubeHandler(message, searchString)
-			} else if (searchString.includes('https://open.spotify.com')) {
-				newSongsQueue = await spotifyHandelr(message, searchString)
-				await message.react('🎵')
-				if (newSongsQueue.length === 0) {
-					return message.channel.send(
-						new Discord.MessageEmbed()
-							.setColor('#A6011F')
-							.setDescription(`Error in loading the playlist`)
-					)
-				}
+
+			if (playlist) {
+				newSongsQueue = playlist
 			} else {
-				newSongsQueue = await searchHandler(message, searchString)
-				if (newSongsQueue.length === 0) {
-					return message.channel.send(
-						new Discord.MessageEmbed()
-							.setColor('#A6011F')
-							.setDescription(`No results found for **${searchString}**`)
-					)
+				const searchString = args.toString().replace(/[, ]+/g, ' ')
+				if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
+					newSongsQueue = await youtubeHandler(message, searchString)
+				} else if (searchString.includes('https://open.spotify.com')) {
+					newSongsQueue = await spotifyHandelr(message, searchString)
+					await message.react('🎵')
+					if (newSongsQueue.length === 0) {
+						return message.channel.send(
+							new Discord.MessageEmbed()
+								.setColor('#A6011F')
+								.setDescription(`Error in loading the playlist`)
+						)
+					}
+				} else {
+					newSongsQueue = await searchHandler(message, searchString)
+					if (newSongsQueue.length === 0) {
+						return message.channel.send(
+							new Discord.MessageEmbed()
+								.setColor('#A6011F')
+								.setDescription(`No results found for **${searchString}**`)
+						)
+					}
 				}
+
+				if (add) return newSongsQueue
 			}
 
 			let queueContruct

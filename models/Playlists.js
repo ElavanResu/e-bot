@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 10:56:19 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 24 2020
+ * Last Modified: Tue Oct 27 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -21,7 +21,7 @@ const playlistsSchema = (sequelize, DataTypes) => {
       allowNull: false
     },
     playlist: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(99999),
       allowNull: true
     }
   }, {
@@ -29,9 +29,21 @@ const playlistsSchema = (sequelize, DataTypes) => {
   })
 }
 
-const getMemberPlaylist = async (SequelizeConnetion, memberId, playlistName) => {
+const getAllMemberPlaylist = async (SequelizeConnetion, memberId) => {
   try {
     const playlistsObject = await SequelizeConnetion.findAll({
+      where: { member_id: memberId }
+    })
+
+    return playlistsObject
+  } catch (error) {
+    console.log('Error in getAllMemberPlaylist: ', error)
+  }
+}
+
+const getMemberPlaylist = async (SequelizeConnetion, memberId, playlistName) => {
+  try {
+    const playlistsObject = await SequelizeConnetion.findOne({
       where: { member_id: memberId, playlist_name: playlistName }
     })
 
@@ -41,7 +53,61 @@ const getMemberPlaylist = async (SequelizeConnetion, memberId, playlistName) => 
   }
 }
 
+const createPlaylist = async (SequelizeConnetion, memberId, playlistName) => {
+  try {
+    const playlistsObject = await SequelizeConnetion.findOne({
+      where: { member_id: memberId, playlist_name: playlistName }
+    })
+
+    if (playlistsObject) {
+      return {
+        status: 'failed',
+        message: 'Playlist already exists'
+      }
+    }
+
+    await SequelizeConnetion.create({
+      playlist_name: playlistName,
+      member_id: memberId
+    })
+
+    return {
+      status: 'success',
+      message: `Playlist **${playlistName}** created`
+    }
+  } catch (error) {
+    console.log('Error in createPlaylist: ', error)
+  }
+}
+
+const addSongsToPlaylist = async (SequelizeConnetion, memberId, playlistName, songs) => {
+  try {
+    const playlistsObject = await SequelizeConnetion.findOne({
+      where: { member_id: memberId, playlist_name: playlistName }
+    })
+    if (!playlistsObject) {
+      return {
+        status: 'failed'
+      }
+    }
+    if (playlistsObject.playlist !== null && playlistsObject.playlist.length > 0) {
+      playlistsObject.playlist = JSON.stringify([...JSON.parse(playlistsObject.playlist), ...songs])
+    } else {
+      playlistsObject.playlist = JSON.stringify(songs)
+    }
+    playlistsObject.save()
+    return {
+      status: 'success'
+    }
+  } catch (error) {
+    console.log('Error in addSongsToPlaylist: ', error)
+  }
+}
+
 module.exports = {
   playlistsSchema,
-  getMemberPlaylist
+  getMemberPlaylist,
+  createPlaylist,
+  getAllMemberPlaylist,
+  addSongsToPlaylist
 }
