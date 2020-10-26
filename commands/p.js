@@ -19,8 +19,14 @@ const youtubeHandler = require('../commandHandlers/p/youtubeHandler')
 const searchHandler = require('../commandHandlers/p/searchHandler')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 
-const play = (message, queue, guild, song) => {
+let messageId
+
+const play = async (message, queue, guild, song) => {
 	const musicQueue = queue.get(guild.id)
+
+	if (messageId) {
+		messageId.delete()
+	}
 
 	if (!song) {
 		musicQueue.voiceChannel.leave()
@@ -28,7 +34,7 @@ const play = (message, queue, guild, song) => {
 		return
 	}
 
-	message.channel.send(
+	messageId = await message.channel.send(
 		new Discord.MessageEmbed()
 			.setColor('#3EFEFF')
 			.setTitle('**Now Playing**')
@@ -40,10 +46,10 @@ const play = (message, queue, guild, song) => {
     highWaterMark: 1 << 25
 	}))
 
-	dispatcher.on('finish', () => {
+	dispatcher.on('finish', async () => {
 		console.log('Music ended!')
 		musicQueue.songPosition++
-		play(message, queue, guild, musicQueue.songs[musicQueue.songPosition])
+		await play(message, queue, guild, musicQueue.songs[musicQueue.songPosition])
 	})
 
 	dispatcher.on('error', (error) => {
@@ -152,7 +158,7 @@ module.exports = {
 							.setDescription(`${newSongsQueue.length} songs added to the queue`)
 					)
 				}
-				play(message, queue, message.guild, queueContruct.songs[queueContruct.songPosition])
+				await play(message, queue, message.guild, queueContruct.songs[queueContruct.songPosition])
 			} else {
 				musicQueue.songs = [...musicQueue.songs, ...newSongsQueue]
 				if (newSongsQueue.length < 2) {
