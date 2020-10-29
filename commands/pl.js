@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 11:27:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 27 2020
+ * Last Modified: Fri Oct 30 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -71,7 +71,8 @@ module.exports = {
 
       await createPlaylistHandler(message, playlistName)
     } else if (args[0] === 'list') {
-      await listAllPlaylistsHandler(message)
+      const playlistName = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
+      await listAllPlaylistsHandler(message, playlistName)
     } else if (args[0] === 'add') {
       if (!args[1]) return message.channel.send(
         new Discord.MessageEmbed()
