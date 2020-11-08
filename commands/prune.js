@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 
 module.exports = {
 	name: 'prune',
-	description: 'Deletes messages by taking the number of messages to delete from 2 to 50',
+	description: 'Deletes messages by taking the number of messages to delete from 2 to infinity',
 	guildOnly: true,
 	async execute(message, args) {
 		if (!await checkAndUpdatePerms(message.author.id, message.guild.id, 'prune')) {
@@ -19,8 +19,8 @@ module.exports = {
 		if (isNaN(amount)) {
 			return message.reply('Please enter a valid number betweeb 2 to 50')
 		}
-		else if (amount < 2 || amount > 50) {
-			return message.reply('Please enter a alue between 2 to 50')
+		else if (amount < 2) {
+			return message.reply('Please enter a value between 2 to infinity')
 		}
 		console.log('amount: ', amount)
 		message.channel.bulkDelete(amount, true).catch(error => {
