@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 10th 2020, 11:23:10 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 11 2020
+ * Last Modified: Wed Nov 18 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -14,6 +14,7 @@ const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 const restrictUsersHandler = require('../commandHandlers/res/restrictUsersHandler')
 const sendRestrictedUsersList = require('../commandHandlers/res/sendRestrictedUsersList')
 const Discord = require('discord.js')
+const globalUsers = require('../metaData/globalUsers')
 
 module.exports = {
 	name: 'res',
@@ -75,6 +76,17 @@ module.exports = {
         msgToDelete.delete()
       }, 6000)
 
+      return
+    }
+
+    // Check for global users
+    const user = message.mentions.users.first()
+    if (globalUsers.hasOwnProperty(user.id)) {
+      await message.reply(
+        new Discord.MessageEmbed()
+          .setColor('#A6011F')
+          .setDescription(`**${message.author.username}**, you imbecile. No can restrict my master. He izz a god, bow before him.`)
+      )
       return
     }
     await restrictUsersHandler(message, message.mentions.users.first(), message.guild.id)
