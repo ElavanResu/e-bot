@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 27 2020
+ * Last Modified: Sun Nov 29 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -177,6 +177,14 @@ const addSongsToPlaylist = async (memberId, playlistName, songs) => {
   return await playlists.addSongsToPlaylist(Playlists, memberId, playlistName, songs)
 }
 
+const deletePlaylist = async (memberId, playlistName) => {
+  return await playlists.deletePlaylist(Playlists, memberId, playlistName)
+}
+
+const deletePlaylistSong = async (memberId, playlistName, track) => {
+  return await playlists.deletePlaylistSong(Playlists, memberId, playlistName, track)
+}
+
 module.exports = {
   addCustomEmoji,
   getEmojiCode,
@@ -207,5 +215,7 @@ module.exports = {
   getMemberPlaylist,
   createPlaylist,
   getAllMemberPlaylist,
-  addSongsToPlaylist
+  addSongsToPlaylist,
+  deletePlaylist,
+  deletePlaylistSong
 }

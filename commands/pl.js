@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 11:27:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Oct 30 2020
+ * Last Modified: Sun Nov 29 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -17,6 +17,8 @@ const getMemberPlaylistHandler = require('../commandHandlers/pl/getMemberPlaylis
 const createPlaylistHandler = require('../commandHandlers/pl/createPlaylistHandler')
 const listAllPlaylistsHandler = require('../commandHandlers/pl/listAllPlaylistsHandler')
 const addToPlaylistHandler = require('../commandHandlers/pl/addToPlaylistHandler')
+const removeSongFromPlaylistHandler = require('../commandHandlers/pl/removeSongFromPlaylistHandler')
+const removePlaylist = require('../commandHandlers/pl/removePlaylist')
 
 module.exports = {
 	name: 'pl',
@@ -91,6 +93,14 @@ module.exports = {
 
       console.log('songs: ', songs)
       await addToPlaylistHandler(message, playlistName, songs)
+    } else if (args[0] === 'rm') {
+      if (!isNaN(parseInt(args[1]))) {
+        const playlistName = args.splice(2, args.length - 1).toString().replace(/[, ]+/g, ' ')
+        await removeSongFromPlaylistHandler(message, parseInt(args[1]), playlistName)
+      } else {
+        const playlistName = args.splice(1, args.length - 1).toString().replace(/[, ]+/g, ' ')
+        await removePlaylist(message, playlistName)
+      }
     }
   }
 }

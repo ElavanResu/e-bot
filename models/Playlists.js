@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 10:56:19 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 27 2020
+ * Last Modified: Sun Nov 29 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -104,10 +104,66 @@ const addSongsToPlaylist = async (SequelizeConnetion, memberId, playlistName, so
   }
 }
 
+const deletePlaylist = async (SequelizeConnetion, memberId, playlistName) => {
+  try {
+    const playlistsObject = await SequelizeConnetion.findOne({
+      where: { member_id: memberId, playlist_name: playlistName }
+    })
+    if (!playlistsObject) {
+      return {
+        status: 'failed'
+      }
+    }
+    playlistsObject.destroy()
+    return {
+      status: 'success',
+    }
+  } catch (error) {
+    console.log('Error in deletePlaylist: ', error)
+  }
+}
+
+const deletePlaylistSong = async (SequelizeConnetion, memberId, playlistName, track) => {
+  try {
+    const playlistsObject = await SequelizeConnetion.findOne({
+      where: { member_id: memberId, playlist_name: playlistName }
+    })
+    if (!playlistsObject) {
+      return {
+        status: 'failed',
+        message: `Playlist **${playlistName}** not found`
+      }
+    }
+    if (playlistsObject.playlist !== null && playlistsObject.playlist.length > 0) {
+      const playlist = JSON.parse(playlistsObject.playlist)
+      if (playlist[track]) {
+        playlist.splice(track, 1)
+        playlistsObject.playlist = JSON.stringify(playlist)
+        playlistsObject.save()
+      } else {
+        return {
+          status: 'failed',
+          message: `Track number **${track}** not found playlist **${playlistName}**`
+        }
+      }
+    } else {
+      return {
+        status: 'failed',
+        message: `There are no tracks added in playlist **${playlistName}**`
+      }
+    }
+
+  } catch (error) {
+    console.log('Error in deletePlaylistSong: ', error)
+  }
+}
+
 module.exports = {
   playlistsSchema,
   getMemberPlaylist,
   createPlaylist,
   getAllMemberPlaylist,
-  addSongsToPlaylist
+  addSongsToPlaylist,
+  deletePlaylist,
+  deletePlaylistSong
 }
