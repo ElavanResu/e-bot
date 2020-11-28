@@ -10,6 +10,7 @@
  * ------------------------------------
  * All Rights reserved
  */
+const Discord = require('discord.js')
 const { deletePlaylistSong } = require('../../dbObjects')
 const removeSongFromPlaylistHandler = async (message, track, playlistName) => {
   try {
@@ -20,7 +21,7 @@ const removeSongFromPlaylistHandler = async (message, track, playlistName) => {
           .setColor('#3EFEFF')
           .setDescription(`Song number **${track}** deleted from ${playlistName}`)
       )
-    } else if (response.status === 'error') {
+    } else if (response.status === 'failed') {
       return message.channel.send(
         new Discord.MessageEmbed()
           .setColor('#A6011F')

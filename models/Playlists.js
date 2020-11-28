@@ -136,10 +136,13 @@ const deletePlaylistSong = async (SequelizeConnetion, memberId, playlistName, tr
     }
     if (playlistsObject.playlist !== null && playlistsObject.playlist.length > 0) {
       const playlist = JSON.parse(playlistsObject.playlist)
-      if (playlist[track]) {
-        playlist.splice(track, 1)
+      if (playlist[track - 1]) {
+        playlist.splice(track - 1, 1)
         playlistsObject.playlist = JSON.stringify(playlist)
         playlistsObject.save()
+        return {
+          status: 'success',
+        }
       } else {
         return {
           status: 'failed',
