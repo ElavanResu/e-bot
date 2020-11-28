@@ -4,7 +4,7 @@
  * Created Date: Thursday, October 1st 2020, 11:03:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Oct 22 2020
+ * Last Modified: Mon Oct 26 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -67,10 +67,10 @@ module.exports = {
 			.then(webhook => {
 				let foundHook
 				webhook.forEach(ele => {
-					if (ele.name === 'SimonHook') foundHook = ele
+					if (ele.name === 'E-Bot') foundHook = ele
 				})
 				if (!foundHook) {
-					message.channel.createWebhook('SimonHook')
+					message.channel.createWebhook('E-Bot')
 						.then(newWebhook => {
 							newWebhook.send(emojiMessage, {
 								'username': authorDetails.displayName,

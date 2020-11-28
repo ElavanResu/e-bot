@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 10:55:30 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 19 2020
+ * Last Modified: Sun Nov 29 2020
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -19,6 +19,7 @@ const restrictedUsers = require('./models/RestrictedUsers')
 const customCommands = require('./models/CustomCommands')
 const favoriteEmoji = require('./models/FavoriteEmojis')
 const memberReactions = require('./models/MemberReactions')
+const playlists = require('./models/Playlists')
 if (process.env.NODE_ENV !== 'production') {
 	config({
 		path: __dirname + '/.env'
@@ -157,6 +158,33 @@ const removeReactionsDetails = async (memberId, guildId) => {
   return await memberReactions.removeReactionsDetails(MemberReactions, memberId, guildId)
 }
 
+// Playlists helpers
+const Playlists = playlists.playlistsSchema(sequelize, Sequelize.DataTypes)
+
+const getMemberPlaylist = async (memberId, playlistName) => {
+  return await playlists.getMemberPlaylist(Playlists, memberId, playlistName)
+}
+
+const createPlaylist = async (memberId, playlistName) => {
+  return await playlists.createPlaylist(Playlists, memberId, playlistName)
+}
+
+const getAllMemberPlaylist = async (memberId) => {
+  return await playlists.getAllMemberPlaylist(Playlists, memberId)
+}
+
+const addSongsToPlaylist = async (memberId, playlistName, songs) => {
+  return await playlists.addSongsToPlaylist(Playlists, memberId, playlistName, songs)
+}
+
+const deletePlaylist = async (memberId, playlistName) => {
+  return await playlists.deletePlaylist(Playlists, memberId, playlistName)
+}
+
+const deletePlaylistSong = async (memberId, playlistName, track) => {
+  return await playlists.deletePlaylistSong(Playlists, memberId, playlistName, track)
+}
+
 module.exports = {
   addCustomEmoji,
   getEmojiCode,
@@ -183,5 +211,11 @@ module.exports = {
   getReactionsDetailsForMember,
   getAllMemberReactionsDetails,
   addReactionsDetails,
-  removeReactionsDetails
+  removeReactionsDetails,
+  getMemberPlaylist,
+  createPlaylist,
+  getAllMemberPlaylist,
+  addSongsToPlaylist,
+  deletePlaylist,
+  deletePlaylistSong
 }
