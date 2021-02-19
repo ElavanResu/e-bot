@@ -4,15 +4,13 @@
  * Created Date: Saturday, October 24th 2020, 1:00:19 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 24 2020
+ * Last Modified: Sat Feb 20 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
 const Discord = require('discord.js')
-const permsListHandler = require('../commandHandlers/perms/permsListHandler')
-const setPermsHandler = require('../commandHandlers/perms/setPermsHandler')
 const globalUsers = require('../metaData/globalUsers')
 
 module.exports = {
@@ -20,7 +18,7 @@ module.exports = {
 	description: 'Deletes message by id',
 	args: true,
   guildOnly: true,
-  aliases: ['permissions'],
+  aliases: [''],
 	usage: '<message_id>',
 	moreInfo: `Deletes message by id`,
   cooldown: -1,

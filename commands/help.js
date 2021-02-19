@@ -5,7 +5,7 @@
  * Created Date: Friday, May 22nd 2020, 12:35:36 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Sat Feb 20 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -17,7 +17,7 @@ const Discord = require('discord.js')
 module.exports = {
 	name: 'help',
 	description: 'List all commands or info about a specific command',
-	alaises: ['commands'],
+	alaises: [''],
 	usage: '<command name>',
 	cooldown: 5,
 	execute(message, args) {

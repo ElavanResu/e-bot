@@ -17,10 +17,10 @@ module.exports = {
 		const amount = parseInt(args[0]) + 1
 
 		if (isNaN(amount)) {
-			return message.reply('Please enter a valid number betweeb 2 to 50')
+			return message.reply('Please enter a valid number between 2 to 99')
 		}
 		else if (amount < 2) {
-			return message.reply('Please enter a value between 2 to infinity')
+			return message.reply('Please enter a value between 2 to 99')
 		}
 		console.log('amount: ', amount)
 		message.channel.bulkDelete(amount, true).catch(error => {
