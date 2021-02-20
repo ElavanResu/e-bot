@@ -4,7 +4,7 @@
  * Created Date: Wednesday, October 21st 2020, 9:19:01 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Oct 23 2020
+ * Last Modified: Sat Feb 20 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -59,8 +59,8 @@ module.exports = {
 				.setDescription(`Emoji not specified`)
 		)
 
-		await reactMessageHandler(message, args[0], args[1])
+		message.delete()
 
-    // message.delete()
+		await reactMessageHandler(message, args[0], args[1])
   }
 }
