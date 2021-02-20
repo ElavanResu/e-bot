@@ -4,7 +4,7 @@
  * Created Date: Monday, October 19th 2020, 9:15:25 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Oct 23 2020
+ * Last Modified: Sat Feb 20 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -48,10 +48,7 @@ const allOwnerWords = [
   '234249678328299520'
 ]
 
-const selectedOwnerWords = [
-  'navale',
-  'shubham'
-]
+const selectedOwnerWords = []
 
 const badBotData = [
   {
