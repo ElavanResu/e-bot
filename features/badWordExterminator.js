@@ -4,7 +4,7 @@
  * Created Date: Tuesday, June 9th 2020, 11:29:38 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Thu Oct 22 2020
+ * Last Modified: Sat Feb 20 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -34,9 +34,10 @@ const checkForBadBot = (message) => {
 
 module.exports = async (message) => {
 	const modifiedSentence = transformSentence(message.content)
-	const existHaremWord = modifiedSentence.toLowerCase().match(checkWords)
+	let existHaremWord
+	if (selectedOwnerWords.length > 0) existHaremWord = modifiedSentence.toLowerCase().match(checkWords)
 	const badBotDetected = checkForBadBot(message)
-	if (existHaremWord !== null || badBotDetected) {
+	if ((existHaremWord !== null && existHaremWord !== undefined) || badBotDetected) {
 		await message.delete()
 		return true
 	}
