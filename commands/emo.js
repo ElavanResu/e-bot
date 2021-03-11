@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 4:33:24 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Oct 17 2020
+ * Last Modified: Fri Mar 12 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -23,6 +23,7 @@ const checkAllHandler = require('../commandHandlers/emo/checkAllHandler')
 const favoriteListHandler = require('../commandHandlers/emo/favoriteListHandler')
 const setFavoriteEmojiHandler = require('../commandHandlers/emo/setFavoriteEmojiHandler')
 const delFavoriteEmojiHandler = require('../commandHandlers/emo/delFavoriteEmojiHandler')
+const refreshAllEmojisHandler = require('../commandHandlers/emo/refreshAllEmojisHandler')
 
 module.exports = {
   name: 'emo',
@@ -122,6 +123,14 @@ module.exports = {
           .setDescription('Emoji name not specified')
       )
       await delFavoriteEmojiHandler(message, message.author.id, args[1])
+    } else if (args[0] === 'refall') {
+      if (!globalUsers.hasOwnProperty(message.author.id)) return message.channel.send(
+        new Discord.MessageEmbed()
+          .setColor('#A6011F')
+          .setDescription(`Sorry, no one is allowed to use the system features`)
+      )
+
+      await refreshAllEmojisHandler(message)
     }
   }
 }
