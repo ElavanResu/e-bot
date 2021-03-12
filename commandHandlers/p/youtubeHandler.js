@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 11:20:09 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Fri Mar 12 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -17,7 +17,7 @@ const youtubeHandler = async (message, searchString) => {
     const info = await ytdl.getBasicInfo(searchString)
     await message.react('🎵')
     return [{
-      title: info.playerResponse.videoDetails.title,
+      title: info.player_response.videoDetails.title,
       url: searchString,
       requestedBy: message.author.id
     }]

@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 27 2020
+ * Last Modified: Fri Mar 12 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -41,6 +41,7 @@ const play = async (message, queue, guild, song) => {
 			.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`)
 	)
 
+	console.log('url: ', song.url)
 	const dispatcher = musicQueue.connection.play(ytdl(song.url, {
 		quality: 'highestaudio',
     highWaterMark: 1 << 25
@@ -105,6 +106,7 @@ module.exports = {
 				const searchString = args.toString().replace(/[, ]+/g, ' ')
 				if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
 					newSongsQueue = await youtubeHandler(message, searchString)
+					console.log('newSongsQueue: ', newSongsQueue)
 				} else if (searchString.includes('https://open.spotify.com')) {
 					newSongsQueue = await spotifyHandelr(message, searchString)
 					await message.react('🎵')
