@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Mar 12 2021
+ * Last Modified: Sun Mar 21 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -49,7 +49,11 @@ const play = async (message, queue, guild, song) => {
 
 	dispatcher.on('finish', async () => {
 		console.log('Music ended!')
-		musicQueue.songPosition++
+		if (musicQueue.loop && musicQueue.songs.length - 1 === musicQueue.songPosition) {
+			musicQueue.songPosition = 0
+		} else {
+			musicQueue.songPosition++
+		}
 		await play(message, queue, guild, musicQueue.songs[musicQueue.songPosition])
 	})
 
@@ -141,6 +145,7 @@ module.exports = {
 					volume: 5,
 					songPosition: 0,
 					playing: true,
+					loop: false
 				}
 				const connection = await voiceChannel.join()
 				queueContruct.connection = connection
