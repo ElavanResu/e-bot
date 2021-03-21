@@ -47,11 +47,19 @@
        )
        await message.react('➿')
        musicQueue.loop = !musicQueue.loop
-       message.channel.send(
-        new Discord.MessageEmbed()
-          .setColor('#3EFEFF')
-          .setTitle('**Queue is looped**')
-      )
+       if (musicQueue.loop) {
+        message.channel.send(
+          new Discord.MessageEmbed()
+            .setColor('#3EFEFF')
+            .setTitle('**Queue is looped**')
+        )
+       } else {
+        message.channel.send(
+          new Discord.MessageEmbed()
+            .setColor('#3EFEFF')
+            .setTitle('**Loop removed**')
+        )
+       }
      } catch (error) {
        console.log(`Error in going forward: ${error}`)
      }
