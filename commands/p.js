@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Tue Oct 27 2020
+ * Last Modified: Mon Mar 22 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,6 +16,7 @@ const ytdl = require('ytdl-core')
 const Discord = require('discord.js')
 const spotifyHandelr = require('../commandHandlers/p/spotifyHandler')
 const youtubeHandler = require('../commandHandlers/p/youtubeHandler')
+const youtubePlaylistHandler = require('../commandHandlers/p/youtubePlaylistHandler')
 const searchHandler = require('../commandHandlers/p/searchHandler')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 
@@ -41,6 +42,7 @@ const play = async (message, queue, guild, song) => {
 			.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`)
 	)
 
+	console.log('url: ', song.url)
 	const dispatcher = musicQueue.connection.play(ytdl(song.url, {
 		quality: 'highestaudio',
     highWaterMark: 1 << 25
@@ -48,7 +50,11 @@ const play = async (message, queue, guild, song) => {
 
 	dispatcher.on('finish', async () => {
 		console.log('Music ended!')
-		musicQueue.songPosition++
+		if (musicQueue.loop && musicQueue.songs.length - 1 === musicQueue.songPosition) {
+			musicQueue.songPosition = 0
+		} else {
+			musicQueue.songPosition++
+		}
 		await play(message, queue, guild, musicQueue.songs[musicQueue.songPosition])
 	})
 
@@ -103,8 +109,12 @@ module.exports = {
 				newSongsQueue = playlist
 			} else {
 				const searchString = args.toString().replace(/[, ]+/g, ' ')
-				if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
+				if (searchString.includes('https://www.youtube.com/playlist')) {
+					newSongsQueue = await youtubePlaylistHandler(message, searchString)
+					console.log('newSongsQueue: ', newSongsQueue)
+				} else if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
 					newSongsQueue = await youtubeHandler(message, searchString)
+					console.log('newSongsQueue: ', newSongsQueue)
 				} else if (searchString.includes('https://open.spotify.com')) {
 					newSongsQueue = await spotifyHandelr(message, searchString)
 					await message.react('🎵')
@@ -139,6 +149,7 @@ module.exports = {
 					volume: 5,
 					songPosition: 0,
 					playing: true,
+					loop: false
 				}
 				const connection = await voiceChannel.join()
 				queueContruct.connection = connection
