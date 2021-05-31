@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Mar 21 2021
+ * Last Modified: Mon Mar 22 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,6 +16,7 @@ const ytdl = require('ytdl-core')
 const Discord = require('discord.js')
 const spotifyHandelr = require('../commandHandlers/p/spotifyHandler')
 const youtubeHandler = require('../commandHandlers/p/youtubeHandler')
+const youtubePlaylistHandler = require('../commandHandlers/p/youtubePlaylistHandler')
 const searchHandler = require('../commandHandlers/p/searchHandler')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 
@@ -108,7 +109,10 @@ module.exports = {
 				newSongsQueue = playlist
 			} else {
 				const searchString = args.toString().replace(/[, ]+/g, ' ')
-				if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
+				if (searchString.includes('https://www.youtube.com/playlist')) {
+					newSongsQueue = await youtubePlaylistHandler(message, searchString)
+					console.log('newSongsQueue: ', newSongsQueue)
+				} else if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
 					newSongsQueue = await youtubeHandler(message, searchString)
 					console.log('newSongsQueue: ', newSongsQueue)
 				} else if (searchString.includes('https://open.spotify.com')) {
