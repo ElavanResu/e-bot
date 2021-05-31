@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 11:27:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Nov 29 2020
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -12,7 +12,7 @@
  */
 const Discord = require('discord.js')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 const getMemberPlaylistHandler = require('../commandHandlers/pl/getMemberPlaylistHandler')
 const createPlaylistHandler = require('../commandHandlers/pl/createPlaylistHandler')
 const listAllPlaylistsHandler = require('../commandHandlers/pl/listAllPlaylistsHandler')

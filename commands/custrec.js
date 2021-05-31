@@ -4,7 +4,7 @@
  * Created Date: Sunday, October 18th 2020, 10:26:14 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 19 2020
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -12,7 +12,7 @@
  */
 const addReactionsHandler = require('../commandHandlers/custrec/addReactionsHandler')
 const removeReactionsHandler = require('../commandHandlers/custrec/removeReactionsHandler')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 
 module.exports = {
 	name: 'custrec',

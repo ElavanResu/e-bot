@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 10th 2020, 11:23:10 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Nov 18 2020
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -14,7 +14,7 @@ const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 const restrictUsersHandler = require('../commandHandlers/res/restrictUsersHandler')
 const sendRestrictedUsersList = require('../commandHandlers/res/sendRestrictedUsersList')
 const Discord = require('discord.js')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 
 module.exports = {
 	name: 'res',
