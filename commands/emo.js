@@ -4,13 +4,13 @@
  * Created Date: Saturday, October 3rd 2020, 4:33:24 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Fri Mar 12 2021
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 const Discord = require('discord.js')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
 const listHandler = require('../commandHandlers/emo/listHandler')

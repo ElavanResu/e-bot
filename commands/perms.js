@@ -13,7 +13,7 @@
 const Discord = require('discord.js')
 const permsListHandler = require('../commandHandlers/perms/permsListHandler')
 const setPermsHandler = require('../commandHandlers/perms/setPermsHandler')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 
 module.exports = {
 	name: 'perms',
