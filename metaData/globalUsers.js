@@ -4,7 +4,7 @@
  * Created Date: Sunday, October 4th 2020, 4:24:46 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -16,4 +16,14 @@ const globalUsers = {
 	}
 }
 
-module.exports = globalUsers
+const guestGlobalusers = {
+	...globalUsers,
+	'454615922909380619': {
+		name: 'SeBook'
+	}
+}
+
+module.exports = {
+	globalUsers,
+	guestGlobalusers
+}

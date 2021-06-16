@@ -6,7 +6,7 @@
  * Created Date: Monday, May 25th 2020, 8:09:13 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Mar 22 2021
+ * Last Modified: Thu Jun 17 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -19,6 +19,7 @@ const youtubeHandler = require('../commandHandlers/p/youtubeHandler')
 const youtubePlaylistHandler = require('../commandHandlers/p/youtubePlaylistHandler')
 const searchHandler = require('../commandHandlers/p/searchHandler')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
+const yts = require('yt-search')
 
 let messageId
 
@@ -35,15 +36,46 @@ const play = async (message, queue, guild, song) => {
 		return
 	}
 
+	// Get song details
+	let songDetails
+	if (song.type === 'normal') {
+		const results = await yts(`${song.name} ${song.artistName}`)
+		songDetails = {
+			title: results.videos[0].title,
+			url: results.videos[0].url
+		}
+	} else if (song.type === 'youtubeLink') {
+		songDetails = {
+			title: song.name,
+			url: song.artistName
+		}
+	} else if (song.type === 'playlist') {
+		const videoData = await yts({ videoId: song.name })
+		songDetails = {
+			title: videoData.title,
+			url: videoData.url
+		}
+	} else if (song.type === 'stringSearch') {
+		songDetails = {
+			title: song.name,
+			url: song.url
+		}
+	} else {
+		const results = await yts(song.name)
+		songDetails = {
+			title: results.videos[0].title,
+			url: results.videos[0].url
+		}
+	}
+
 	messageId = await message.channel.send(
 		new Discord.MessageEmbed()
 			.setColor('#3EFEFF')
 			.setTitle('**Now Playing**')
-			.setDescription(`[${song.title}](${song.url}) [<@${song.requestedBy}>]`)
+			.setDescription(`[${songDetails.title}](${songDetails.url}) [<@${song.requestedBy}>]`)
 	)
 
-	console.log('url: ', song.url)
-	const dispatcher = musicQueue.connection.play(ytdl(song.url, {
+	const dispatcher = musicQueue.connection.play(ytdl(songDetails.url, {
 		quality: 'highestaudio',
     highWaterMark: 1 << 25
 	}))
@@ -111,10 +143,8 @@ module.exports = {
 				const searchString = args.toString().replace(/[, ]+/g, ' ')
 				if (searchString.includes('https://www.youtube.com/playlist')) {
 					newSongsQueue = await youtubePlaylistHandler(message, searchString)
-					console.log('newSongsQueue: ', newSongsQueue)
 				} else if (searchString.includes('https://youtu.be') || searchString.includes('http://y2u.be') || searchString.includes('https://www.youtube.com')) {
 					newSongsQueue = await youtubeHandler(message, searchString)
-					console.log('newSongsQueue: ', newSongsQueue)
 				} else if (searchString.includes('https://open.spotify.com')) {
 					newSongsQueue = await spotifyHandelr(message, searchString)
 					await message.react('🎵')
@@ -160,7 +190,7 @@ module.exports = {
 						new Discord.MessageEmbed()
 							.setColor('#3EFEFF')
 							.setTitle('**Added To Queue**')
-							.setDescription(`[${newSongsQueue[0].title}](${newSongsQueue[0].url}) [<@${newSongsQueue[0].requestedBy}>]`)
+							.setDescription(`${newSongsQueue[0].name} [<@${newSongsQueue[0].requestedBy}>]`)
 					)
 				} else {
 					message.channel.send(
@@ -177,7 +207,7 @@ module.exports = {
 						new Discord.MessageEmbed()
 							.setColor('#3EFEFF')
 							.setTitle('**Added To Queue**')
-							.setDescription(`[${newSongsQueue[0].title}](${newSongsQueue[0].url}) [<@${newSongsQueue[0].requestedBy}>]`)
+							.setDescription(`${newSongsQueue[0].name} [<@${newSongsQueue[0].requestedBy}>]`)
 					)
 				} else {
 					return message.channel.send(

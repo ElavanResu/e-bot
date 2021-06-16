@@ -4,7 +4,7 @@
  * Created Date: Sunday, October 4th 2020, 1:55:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Oct 04 2020
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -12,7 +12,7 @@
  */
 
 const { getMemberPerms } = require('../dbObjects')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 const checkAndUpdatePerms = async (memberId, guildId, permType) => {
   try {
     if (globalUsers.hasOwnProperty(memberId)) {

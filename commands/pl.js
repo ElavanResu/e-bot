@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 11:27:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Sun Nov 29 2020
+ * Last Modified: Thu Jun 17 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -12,7 +12,7 @@
  */
 const Discord = require('discord.js')
 const checkAndUpdatePerms = require('../features/checkAndUpdatePerms')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 const getMemberPlaylistHandler = require('../commandHandlers/pl/getMemberPlaylistHandler')
 const createPlaylistHandler = require('../commandHandlers/pl/createPlaylistHandler')
 const listAllPlaylistsHandler = require('../commandHandlers/pl/listAllPlaylistsHandler')
@@ -86,12 +86,15 @@ module.exports = {
       const command = client.commands.get('p')
       let songs = []
       for (const searchString of splitList) {
-        console.log('searchString: ', searchString)
-        const response = await command.execute(message, args = [searchString], { musicQueue, queue, client, add: true })
-        songs = [...songs, ...response]
+        songs = [
+          ...songs,
+          {
+            name: searchString,
+            requestedBy: message.author.id
+          }
+        ]
       }
 
-      console.log('songs: ', songs)
       await addToPlaylistHandler(message, playlistName, songs)
     } else if (args[0] === 'rm') {
       if (!isNaN(parseInt(args[1]))) {

@@ -4,7 +4,7 @@
  * Created Date: Wednesday, October 14th 2020, 10:57:26 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon Oct 19 2020
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -15,7 +15,7 @@ const Discord = require('discord.js')
 const addCustomCommandHandler = require('../commandHandlers/cm/addCustomCommandHandler')
 const listHandler = require('../commandHandlers/cm/listHandler')
 const removeCustomCommandHandler = require('../commandHandlers/cm/removeCustomCommandHandler')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 const { allOwnerWords } = require('../metaData/words')
 
 const regexCheck = new RegExp(allOwnerWords.toString().replace(/,+/g, '|'), 'g')

@@ -6,7 +6,7 @@
  * Created Date: Thursday, June 25th 2020, 7:26:55 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Thu Jun 17 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -76,9 +76,9 @@ module.exports = {
 			}
 			for (let songCount = (listIndex * 10) - 10; songCount < listLimit; songCount++) {
 				if (musicQueue.songPosition === songCount) {
-					list = list + `**${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>]** \n`
+					list = list + `**${songCount + 1})   ${musicQueue.songs[songCount].name} ${musicQueue.songs[songCount].artistName} [<@${musicQueue.songs[songCount].requestedBy}>]** \n`
 				} else {
-					list = list + `${songCount + 1})   [${musicQueue.songs[songCount].title}](${musicQueue.songs[songCount].url})[<@${musicQueue.songs[songCount].requestedBy}>] \n`
+					list = list + `${songCount + 1})   ${musicQueue.songs[songCount].name} ${musicQueue.songs[songCount].artistName} [<@${musicQueue.songs[songCount].requestedBy}>] \n`
 				}
 			}
 			if (list.length !== 0) {

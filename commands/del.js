@@ -4,14 +4,14 @@
  * Created Date: Saturday, October 24th 2020, 1:00:19 am
  * Author: Shubham Navale
  * -----
- * Last Modified: Sat Feb 20 2021
+ * Last Modified: Mon May 31 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
  * All Rights reserved
  */
 const Discord = require('discord.js')
-const globalUsers = require('../metaData/globalUsers')
+const { globalUsers } = require('../metaData/globalUsers')
 
 module.exports = {
 	name: 'del',
