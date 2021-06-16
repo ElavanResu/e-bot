@@ -47,7 +47,7 @@ const play = async (message, queue, guild, song) => {
 	} else if (song.type === 'youtubeLink') {
 		songDetails = {
 			title: song.name,
-			url: song.artistName
+			url: song.searchString
 		}
 	} else if (song.type === 'playlist') {
 		const videoData = await yts({ videoId: song.name })

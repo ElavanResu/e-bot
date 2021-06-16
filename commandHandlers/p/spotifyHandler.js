@@ -23,42 +23,56 @@ const spotifyHandler = async (message, searchString) => {
     const searchId = searchString.match(/[a-zA-Z0-9]{22}/g)
     if (searchString.includes('playlist')) {
       const playListRecordResponse = await getPlaylistRecord(searchId[0])
-      return Promise.all(playListRecordResponse.map(async ele => {
-        return {
-          name: ele.track.name,
-          astistName: ele.track.artists[0].name,
-          requestedBy: message.author.id,
-          type: 'normal'
+      const songList = []
+      Promise.all(playListRecordResponse.map(async ele => {
+        if (ele.track && ele.track.artists && ele.track.artists[0] && ele.track.artists[0].name && ele.track.name) {
+          songList.push({
+            name: ele.track.name,
+            artistName: ele.track.artists[0].name,
+            requestedBy: message.author.id,
+            type: 'normal'
+          })
         }
       }))
+      return songList
     } else if (searchString.includes('artist')) {
       const artistRecord = await getArtistRecord(searchId[0])
-      return Promise.all(artistRecord.map(async ele => {
-        return {
-          name: ele.name,
-          astistName: ele.artists[0].name,
-          requestedBy: message.author.id,
-          type: 'normal'
+      const songList = []
+      Promise.all(artistRecord.map(async ele => {
+        if (ele.name && ele.artists && ele.artists[0] && ele.artists[0].name) {
+          songList.push({
+            name: ele.name,
+            artistName: ele.artists[0].name,
+            requestedBy: message.author.id,
+            type: 'normal'
+          })
         }
       }))
+      return songList
     } else if (searchString.includes('album')) {
       const albumRecord = await getAlbumRecord(searchId[0])
-      return Promise.all(albumRecord.map(async ele => {
-        return {
-          name: ele.name,
-          astistName: ele.artists[0].name,
-          requestedBy: message.author.id,
-          type: 'normal'
+      const songList = []
+      Promise.all(albumRecord.map(async ele => {
+        if (ele.name && ele.artists && ele.artists[0] && ele.artists[0].name) {
+          songList.push({
+            name: ele.name,
+            artistName: ele.artists[0].name,
+            requestedBy: message.author.id,
+            type: 'normal'
+          })
         }
       }))
+      return songList
     } else if (searchString.includes('track')) {
       const trackRecord = await getTrackRecord(searchId[0])
-      return [{
-        name: trackRecord.name,
-        astistName: trackRecord.artists[0].name,
-        requestedBy: message.author.id,
-        type: 'normal'
-      }]
+      if (trackRecord.name && trackRecord.artists && trackRecord.artists[0] && trackRecord.artists[0].name) {
+        return [{
+          name: trackRecord.name,
+          artistName: trackRecord.artists[0].name,
+          requestedBy: message.author.id,
+          type: 'normal'
+        }]
+      }
     }
     return []
   } catch (error) {
