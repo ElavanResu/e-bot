@@ -4,7 +4,7 @@
  * Created Date: Friday, October 23rd 2020, 11:27:18 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Mon May 31 2021
+ * Last Modified: Thu Jun 17 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -86,12 +86,15 @@ module.exports = {
       const command = client.commands.get('p')
       let songs = []
       for (const searchString of splitList) {
-        console.log('searchString: ', searchString)
-        const response = await command.execute(message, args = [searchString], { musicQueue, queue, client, add: true })
-        songs = [...songs, ...response]
+        songs = [
+          ...songs,
+          {
+            name: searchString,
+            requestedBy: message.author.id
+          }
+        ]
       }
 
-      console.log('songs: ', songs)
       await addToPlaylistHandler(message, playlistName, songs)
     } else if (args[0] === 'rm') {
       if (!isNaN(parseInt(args[1]))) {

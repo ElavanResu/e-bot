@@ -4,7 +4,7 @@
  * Created Date: Saturday, October 3rd 2020, 10:10:06 pm
  * Author: Shubham Navale
  * -----
- * Last Modified: Wed Oct 14 2020
+ * Last Modified: Thu Jun 17 2021
  * Modified By: Shubham Navale
  * -----
  * ------------------------------------
@@ -17,7 +17,6 @@ const {
   getAlbumRecord,
 	getTrackRecord
  } = require('../../services/spotify')
- const yts = require('yt-search')
 
 const spotifyHandler = async (message, searchString) => {
   try {
@@ -25,46 +24,40 @@ const spotifyHandler = async (message, searchString) => {
     if (searchString.includes('playlist')) {
       const playListRecordResponse = await getPlaylistRecord(searchId[0])
       return Promise.all(playListRecordResponse.map(async ele => {
-        const results = await yts(`${ele.track.name} ${ele.track.artists[0].name}`)
-        if (results.videos.length > 0) {
-          return {
-            title: results.videos[0].title,
-            url: results.videos[0].url,
-            requestedBy: message.author.id
-          }
+        return {
+          name: ele.track.name,
+          astistName: ele.track.artists[0].name,
+          requestedBy: message.author.id,
+          type: 'normal'
         }
       }))
     } else if (searchString.includes('artist')) {
       const artistRecord = await getArtistRecord(searchId[0])
       return Promise.all(artistRecord.map(async ele => {
-        const results = await yts(`${ele.name} ${ele.artists[0].name}`)
-        if (results.videos.length > 0) {
-          return {
-            title: results.videos[0].title,
-            url: results.videos[0].url,
-            requestedBy: message.author.id
-          }
+        return {
+          name: ele.name,
+          astistName: ele.artists[0].name,
+          requestedBy: message.author.id,
+          type: 'normal'
         }
       }))
     } else if (searchString.includes('album')) {
       const albumRecord = await getAlbumRecord(searchId[0])
       return Promise.all(albumRecord.map(async ele => {
-        const results = await yts(`${ele.name} ${ele.artists[0].name}`)
-        if (results.videos.length > 0) {
-          return {
-            title: results.videos[0].title,
-            url: results.videos[0].url,
-            requestedBy: message.author.id
-          }
+        return {
+          name: ele.name,
+          astistName: ele.artists[0].name,
+          requestedBy: message.author.id,
+          type: 'normal'
         }
       }))
     } else if (searchString.includes('track')) {
       const trackRecord = await getTrackRecord(searchId[0])
-      const results = await yts(`${trackRecord.name} ${trackRecord.artists[0].name}`)
       return [{
-        title: results.videos[0].title,
-        url: results.videos[0].url,
-        requestedBy: message.author.id
+        name: trackRecord.name,
+        astistName: trackRecord.artists[0].name,
+        requestedBy: message.author.id,
+        type: 'normal'
       }]
     }
     return []
