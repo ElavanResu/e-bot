@@ -18,7 +18,8 @@ const youtubeHandler = async (message, searchString) => {
     await message.react('🎵')
     return [{
       name: info.player_response.videoDetails.title,
-      artistName: searchString,
+      artistName: '',
+      searchString,
       requestedBy: message.author.id,
       type: 'youtubeLink'
     }]

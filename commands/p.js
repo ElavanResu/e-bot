@@ -47,7 +47,7 @@ const play = async (message, queue, guild, song) => {
 	} else if (song.type === 'youtubeLink') {
 		songDetails = {
 			title: song.name,
-			url: song.artistName
+			url: song.searchString
 		}
 	} else if (song.type === 'playlist') {
 		const videoData = await yts({ videoId: song.name })
@@ -75,10 +75,12 @@ const play = async (message, queue, guild, song) => {
 			.setDescription(`[${songDetails.title}](${songDetails.url}) [<@${song.requestedBy}>]`)
 	)
 
-	const dispatcher = musicQueue.connection.play(ytdl(songDetails.url, {
+	const data = ytdl(songDetails.url, {
 		quality: 'highestaudio',
     highWaterMark: 1 << 25
-	}))
+	})
+
+	const dispatcher = musicQueue.connection.play(data)
 
 	dispatcher.on('finish', async () => {
 		console.log('Music ended!')
@@ -91,6 +93,7 @@ const play = async (message, queue, guild, song) => {
 	})
 
 	dispatcher.on('error', (error) => {
+		console.log('error in dispatcher: ', error)
 		const hook = new Discord.WebhookClient(`${process.env.ERRORHOOKID}`, `${process.env.ERRORHOOKTOKEN}`)
 		hook.send(`There is an error in dispatcher: ${error}\n\n ${JSON.stringify(error)}`,{
 			username: `Music Bot`,
